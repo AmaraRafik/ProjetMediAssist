@@ -10,24 +10,24 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // Example: You can set the doctor’s name dynamically later
-        val doctorNameText = findViewById<TextView>(R.id.doctorNameText)
-        doctorNameText.text = "Dr. Dupont"
+        val doctorName = intent.getStringExtra("doctorName") ?: "Docteur"
+        findViewById<TextView>(R.id.doctorNameText).text = doctorName
     }
 
     fun onAgendaClick(view: View) {
-        // TODO: startActivity(Intent(this, AgendaActivity::class.java))
+        // TODO: Naviguer vers l'agenda
     }
 
     fun onPatientsClick(view: View) {
-        // TODO: startActivity(Intent(this, PatientsActivity::class.java))
+        // TODO: Naviguer vers les patients
     }
 
     fun onModesClick(view: View) {
-        // TODO: startActivity(Intent(this, ModesActivity::class.java))
+        // TODO: Naviguer vers les modes intelligents
     }
 
     fun onSettingsClick(view: View) {
-        // TODO: startActivity(Intent(this, SettingsActivity::class.java))
+        // TODO: Naviguer vers les paramètres
     }
 }
+
