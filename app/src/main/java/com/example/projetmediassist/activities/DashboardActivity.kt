@@ -1,9 +1,10 @@
-package com.example.projetmediassist
+package com.example.projetmediassist.activities
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.projetmediassist.R
 
 class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,19 +16,19 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     fun onAgendaClick(view: View) {
-        // TODO: Naviguer vers l'agenda
+
     }
 
     fun onPatientsClick(view: View) {
-        // TODO: Naviguer vers les patients
-    }
+
+            }
 
     fun onModesClick(view: View) {
-        // TODO: Naviguer vers les modes intelligents
-    }
+
+            }
 
     fun onSettingsClick(view: View) {
-        // TODO: Naviguer vers les paramètres
+
     }
 }
 

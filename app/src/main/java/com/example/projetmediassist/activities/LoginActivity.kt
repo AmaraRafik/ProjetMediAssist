@@ -1,4 +1,4 @@
-package com.example.projetmediassist
+package com.example.projetmediassist.activities
 
 import android.content.Intent
 import android.os.Bundle
