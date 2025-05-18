@@ -94,9 +94,9 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:gravity="center"
+                    android:id="@+id/agendaCard"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="onAgendaClick">
+                    android:focusable="true">
 
                     <ImageView
                         android:src="@drawable/ic_agenda"
@@ -128,7 +128,7 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="onPatientsClick">
+                    android:id="@+id/patientsCard">
 
                     <ImageView
                         android:src="@drawable/ic_patients"
@@ -158,9 +158,9 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:gravity="center"
+                    android:id="@+id/modesCard"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="onModesClick">
+                    android:focusable="true">
 
                     <ImageView
                         android:src="@drawable/ic_modes"
@@ -193,7 +193,7 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="onSettingsClick">
+                    android:id="@+id/settingsCard">
 
                     <ImageView
                         android:src="@drawable/ic_settings"

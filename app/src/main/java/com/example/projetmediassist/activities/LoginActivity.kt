@@ -37,6 +37,10 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(this@LoginActivity, "Mot de passe incorrect", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
+                                // ---- MODIF : Sauvegarder la session ----
+                                val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
+                                sharedPref.edit().putString("doctorEmail", doctor.email).apply()
+
                                 val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
                                 intent.putExtra("doctorName", doctor.fullName)
                                 startActivity(intent)
