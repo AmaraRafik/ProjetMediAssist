@@ -3,7 +3,9 @@ package com.example.projetmediassist.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projetmediassist.R
 
@@ -14,24 +16,34 @@ class DashboardActivity : AppCompatActivity() {
 
         val doctorName = intent.getStringExtra("doctorName") ?: "Docteur"
         findViewById<TextView>(R.id.doctorNameText).text = doctorName
-    }
 
-    fun onAgendaClick(view: View) {
+        val agendaCard = findViewById<LinearLayout>(R.id.agendaCard)
+        val patientsCard = findViewById<LinearLayout>(R.id.patientsCard)
+        val modesCard = findViewById<LinearLayout>(R.id.modesCard)
+        val settingsCard = findViewById<LinearLayout>(R.id.settingsCard)
 
-    }
-
-    fun onPatientsClick(view: View) {
-        val intent = Intent(this, PatientListActivity::class.java)
-        startActivity(intent)
-
+        agendaCard.setOnClickListener {
+            startActivity(Intent(this, AgendaActivity::class.java))
         }
 
-    fun onModesClick(view: View) {
+        patientsCard.setOnClickListener {
+            val intent = Intent(this, PatientListActivity::class.java)
+            startActivity(intent)
+        }
 
-            }
 
-    fun onSettingsClick(view: View) {
+        modesCard.setOnClickListener {
+            // À adapter avec ton activité réelle
+            Toast.makeText(this, "Modes intelligents à venir", Toast.LENGTH_SHORT).show()
+        }
+
+        settingsCard.setOnClickListener {
+            // À adapter avec ton activité réelle
+            Toast.makeText(this, "Paramètres à venir", Toast.LENGTH_SHORT).show()
+        }
 
     }
+
+    
 }
 
