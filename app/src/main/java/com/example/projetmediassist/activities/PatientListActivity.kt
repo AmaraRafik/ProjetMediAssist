@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projetmediassist.adapters.PatientAdapter
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.databinding.ActivityPatientListBinding
-import com.example.projetmediassist.models.Patient
+import com.example.projetmediassist.fragments.AddPatientFragment
+import com.example.projetmediassist.fragments.OnPatientAddedListener // AJOUT ICI !
 import kotlinx.coroutines.launch
 
 class PatientListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPatientListBinding
     private lateinit var adapter: PatientAdapter
+    private var doctorEmail: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,47 +27,33 @@ class PatientListActivity : AppCompatActivity() {
         binding.patientRecyclerView.adapter = adapter
 
         // Récupère l’email du médecin connecté (depuis la session)
-        //val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
-        //val doctorEmail = sharedPref.getString("doctorEmail", null)
+        val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
+        doctorEmail = sharedPref.getString("doctorEmail", null)
 
-        //if (doctorEmail != null) {
-        //    val db = AppDatabase.getDatabase(this)
-        //    lifecycleScope.launch {
-        //        val patients = db.patientDao().getPatientsForDoctor(doctorEmail)
-        //        adapter.submitList(patients)
-        //    }
-        //}
-
-        // Ajout du patient (à faire plus tard)
-        val fakePatients = listOf(
-            Patient(
-                id = 1,
-                fullName = "Rafik Lemalade",
-                age = 41,
-                lastAppointment = "12 septembre 2024",
-                doctorEmail = "toto@med.com"
-            ),
-            Patient(
-                id = 2,
-                fullName = "Elhadi Lefou",
-                age = 67,
-                lastAppointment = "12 septembre 2024",
-                doctorEmail = "toto@med.com"
-            ),
-            Patient(
-                id = 3,
-                fullName = "Issa Lebrb",
-                age = 1001,
-                lastAppointment = "30 juin 2090",
-                doctorEmail = "toto@med.com"
-            )
-        )
-        adapter.submitList(fakePatients)
         binding.addPatientButton.setOnClickListener {
-            // TODO: lancer l’activité d’ajout de patient
+            val fragment = AddPatientFragment()
+            // LE CALLBACK POUR REFRESH
+            fragment.onPatientAddedListener = object : OnPatientAddedListener {
+                override fun onPatientAdded() {
+                    refreshPatients()
+                }
+            }
+            fragment.show(supportFragmentManager, "add_patient")
         }
+    }
 
-        // Recherche : à faire plus tard aussi !
-        // binding.searchEditText.addTextChangedListener { ... }
+    private fun refreshPatients() {
+        if (doctorEmail != null) {
+            val db = AppDatabase.getDatabase(this)
+            lifecycleScope.launch {
+                val patients = db.patientDao().getPatientsForDoctor(doctorEmail!!)
+                adapter.submitList(patients)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshPatients()
     }
 }
