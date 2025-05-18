@@ -8,14 +8,14 @@ import com.example.projetmediassist.models.Doctor
 import com.example.projetmediassist.models.Patient
 
 @Database(entities = [Doctor::class, Patient::class], version = 2)
+
 abstract class AppDatabase : RoomDatabase() {
 
     // DAO pour accéder aux médecins
     abstract fun doctorDao(): DoctorDao
     abstract fun patientDao(): PatientDao  // <-- Ajout du DAO patient
 
-    // DAO pour accéder aux rendez-vous
-   // abstract fun appointmentDao(): AppointmentDao
+   
 
     companion object {
         @Volatile
