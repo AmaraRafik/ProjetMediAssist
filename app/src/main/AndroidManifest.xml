@@ -37,6 +37,8 @@
         <activity android:name=".activities.LoginActivity" android:exported="true" />
         <activity android:name=".activities.RegisterActivity" android:exported="true" />
         <activity android:name=".activities.DashboardActivity" android:exported="true" />
+        <activity android:name=".activities.PatientListActivity" android:exported="true" />
+
 
 
     </application>

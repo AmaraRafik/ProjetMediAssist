@@ -5,10 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.projetmediassist.models.Doctor
+import com.example.projetmediassist.models.Patient
 
-@Database(entities = [Doctor::class], version = 1)
+@Database(entities = [Doctor::class, Patient::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun doctorDao(): DoctorDao
+    abstract fun patientDao(): PatientDao  // <-- Ajout du DAO patient
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -18,7 +20,10 @@ abstract class AppDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java, "mediassist.db"
-                ).build().also { instance = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build().also { instance = it }
             }
+
     }
 }

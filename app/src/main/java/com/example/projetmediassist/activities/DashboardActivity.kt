@@ -1,5 +1,6 @@
 package com.example.projetmediassist.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -20,8 +21,10 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     fun onPatientsClick(view: View) {
+        val intent = Intent(this, PatientListActivity::class.java)
+        startActivity(intent)
 
-            }
+        }
 
     fun onModesClick(view: View) {
 
