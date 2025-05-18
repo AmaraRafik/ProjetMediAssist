@@ -8,7 +8,7 @@ import com.example.projetmediassist.adapters.PatientAdapter
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.databinding.ActivityPatientListBinding
 import com.example.projetmediassist.fragments.AddPatientFragment
-import com.example.projetmediassist.fragments.OnPatientAddedListener // AJOUT ICI !
+import com.example.projetmediassist.fragments.OnPatientAddedListener
 import kotlinx.coroutines.launch
 
 class PatientListActivity : AppCompatActivity() {
@@ -30,15 +30,17 @@ class PatientListActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
         doctorEmail = sharedPref.getString("doctorEmail", null)
 
+        // ✅ Ouvre le fragment au clic
         binding.addPatientButton.setOnClickListener {
             val fragment = AddPatientFragment()
-            // LE CALLBACK POUR REFRESH
-            fragment.onPatientAddedListener = object : OnPatientAddedListener {
+
+            fragment.listener = object : OnPatientAddedListener {
                 override fun onPatientAdded() {
                     refreshPatients()
                 }
             }
-            fragment.show(supportFragmentManager, "add_patient")
+
+            fragment.show(supportFragmentManager, "AddPatientFragment")
         }
     }
 

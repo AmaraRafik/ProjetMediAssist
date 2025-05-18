@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="400dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="28dp"
+    android:layout_margin="32dp"
+    card_view:cardCornerRadius="24dp"
     card_view:cardElevation="12dp"
-    android:layout_gravity="center"
-    android:background="@android:color/white"
-    android:padding="0dp">
+    android:background="@android:color/white">
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="32dp"
+        android:padding="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
@@ -24,52 +23,45 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@android:color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="24dp" />
 
         <EditText
             android:id="@+id/fullNameEditText"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:hint="Nom complet"
-            android:textColor="@android:color/black"
+            android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:paddingLeft="14dp"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <EditText
             android:id="@+id/ageEditText"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:hint="Âge"
             android:inputType="number"
-            android:textColor="@android:color/black"
+            android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:paddingLeft="14dp"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <EditText
             android:id="@+id/lastAppointmentEditText"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:hint="Dernière visite"
-            android:textColor="@android:color/black"
+            android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:paddingLeft="14dp"
-            android:textSize="16sp"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="24dp" />
 
         <Button
             android:id="@+id/savePatientButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:text="Enregistrer"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:background="@drawable/button_rounded_blue"
-            android:layout_marginTop="8dp"/>
+            android:backgroundTint="@color/medical_blue"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
