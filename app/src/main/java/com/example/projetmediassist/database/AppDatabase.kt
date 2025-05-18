@@ -15,8 +15,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun doctorDao(): DoctorDao
     abstract fun patientDao(): PatientDao  // <-- Ajout du DAO patient
 
-   
-
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
