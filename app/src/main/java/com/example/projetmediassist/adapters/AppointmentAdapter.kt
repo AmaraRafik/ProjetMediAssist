@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projetmediassist.R
 import com.example.projetmediassist.models.Appointment
 
-class AppointmentAdapter(private val items: List<Appointment>) :
-    RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
+class AppointmentAdapter(
+    private val items: List<Appointment>,
+    private val onDelete: (Appointment) -> Unit
+) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     class AppointmentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val hourText: TextView = view.findViewById(R.id.hourText)
@@ -28,6 +30,12 @@ class AppointmentAdapter(private val items: List<Appointment>) :
         holder.hourText.text = appointment.hour
         holder.patientText.text = appointment.patient
         holder.descriptionText.text = appointment.description
+
+        // Clic long pour suppression
+        holder.itemView.setOnLongClickListener {
+            onDelete(appointment)
+            true
+        }
     }
 
     override fun getItemCount() = items.size
