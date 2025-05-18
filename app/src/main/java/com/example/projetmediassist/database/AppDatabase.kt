@@ -8,6 +8,7 @@ import com.example.projetmediassist.models.Doctor
 import com.example.projetmediassist.models.Patient
 
 @Database(entities = [Doctor::class, Patient::class], version = 2)
+
 abstract class AppDatabase : RoomDatabase() {
 
     // DAO pour accéder aux médecins
