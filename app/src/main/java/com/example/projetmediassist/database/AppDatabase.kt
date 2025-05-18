@@ -4,16 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.projetmediassist.models.Appointment
 import com.example.projetmediassist.models.Doctor
 import com.example.projetmediassist.models.Patient
 
-@Database(entities = [Doctor::class, Patient::class], version = 2)
-
+@Database(entities = [Doctor::class, Patient::class, Appointment::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
 
-    // DAO pour accéder aux médecins
     abstract fun doctorDao(): DoctorDao
-    abstract fun patientDao(): PatientDao  // <-- Ajout du DAO patient
+    abstract fun patientDao(): PatientDao
+    abstract fun appointmentDao(): AppointmentDao  // ✅ nouveau DAO ajouté
 
     companion object {
         @Volatile
@@ -28,6 +28,5 @@ abstract class AppDatabase : RoomDatabase() {
                     .fallbackToDestructiveMigration()
                     .build().also { instance = it }
             }
-
     }
 }

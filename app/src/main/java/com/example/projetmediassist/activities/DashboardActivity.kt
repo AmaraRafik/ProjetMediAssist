@@ -37,9 +37,10 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Modes intelligents à venir", Toast.LENGTH_SHORT).show()
         }
 
+        //val settingsCard = findViewById<LinearLayout>(R.id.settingsCard)
+
         settingsCard.setOnClickListener {
-            // À adapter avec ton activité réelle
-            Toast.makeText(this, "Paramètres à venir", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
     }
