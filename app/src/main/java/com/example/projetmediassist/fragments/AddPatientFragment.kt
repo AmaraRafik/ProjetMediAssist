@@ -1,5 +1,6 @@
 package com.example.projetmediassist.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,12 @@ class AddPatientFragment : DialogFragment() {
     // Le callback que l’activité peut définir
     var listener: OnPatientAddedListener? = null
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        return dialog
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,17 +49,26 @@ class AddPatientFragment : DialogFragment() {
         binding.savePatientButton.setOnClickListener {
             val name = binding.fullNameEditText.text.toString().trim()
             val age = binding.ageEditText.text.toString().toIntOrNull() ?: 0
-            val lastVisit = binding.lastAppointmentEditText.text.toString().trim()
+            val phone = binding.phoneEditText.text?.toString()?.trim()
+            val email = binding.emailEditText.text?.toString()?.trim()
+            val address = binding.addressEditText.text?.toString()?.trim()
+            val history = binding.historyEditText.text?.toString()?.trim()
+            val allergy = binding.allergyEditText.text?.toString()?.trim()
 
-            if (name.isEmpty() || age <= 0 || lastVisit.isEmpty() || doctorEmail == null) {
-                Toast.makeText(requireContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
+            if (name.isEmpty() || age <= 0 || doctorEmail == null) {
+                Toast.makeText(requireContext(), "Veuillez remplir tous les champs obligatoires", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val newPatient = Patient(
                 fullName = name,
                 age = age,
-                lastAppointment = lastVisit,
+                phone = phone,
+                email = email,
+                address = address,
+                medicalHistory = history,
+                allergies = allergy,
+                lastAppointment = "Aucune",
                 doctorEmail = doctorEmail
             )
 
@@ -73,5 +89,12 @@ class AddPatientFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.90).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 }

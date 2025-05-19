@@ -12,4 +12,7 @@ interface PatientDao {
 
     @Query("SELECT * FROM patients WHERE doctorEmail = :email")
     suspend fun getPatientsForDoctor(email: String): List<Patient>
+
+    @Query("SELECT * FROM patients WHERE id = :id")
+    suspend fun getPatientById(id: Int): Patient?
 }

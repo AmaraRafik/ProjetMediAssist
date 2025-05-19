@@ -3,8 +3,11 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="32dp"
-    card_view:cardCornerRadius="24dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="36dp"
+    android:layout_marginBottom="36dp"
+    card_view:cardCornerRadius="32dp"
     card_view:cardElevation="12dp"
     android:background="@android:color/white">
 
@@ -32,7 +35,7 @@
             android:hint="Nom complet"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="12dp" />
 
         <EditText
             android:id="@+id/ageEditText"
@@ -42,16 +45,58 @@
             android:inputType="number"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="12dp" />
 
+        <!-- Nouveaux champs ajoutés -->
         <EditText
-            android:id="@+id/lastAppointmentEditText"
+            android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Dernière visite"
+            android:hint="Téléphone"
+            android:inputType="phone"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="12dp"
+            />
+
+        <EditText
+            android:id="@+id/addressEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Adresse"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/historyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Antécédents médicaux"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/allergyEditText"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Allergies"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="12dp" />
+
 
         <Button
             android:id="@+id/savePatientButton"

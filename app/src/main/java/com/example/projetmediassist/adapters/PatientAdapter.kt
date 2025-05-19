@@ -1,5 +1,6 @@
 package com.example.projetmediassist.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projetmediassist.R
 import com.example.projetmediassist.models.Patient
 
-class PatientAdapter : RecyclerView.Adapter<PatientAdapter.PatientViewHolder>() {
+class PatientAdapter(
+    private val onPatientClick: (Patient) -> Unit // <-- ajout du callback
+) : RecyclerView.Adapter<PatientAdapter.PatientViewHolder>() {
     private var patients: List<Patient> = emptyList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun submitList(newPatients: List<Patient>) {
         patients = newPatients
         notifyDataSetChanged()
@@ -29,6 +33,11 @@ class PatientAdapter : RecyclerView.Adapter<PatientAdapter.PatientViewHolder>() 
         holder.nameText.text = patient.fullName
         holder.ageText.text = "Âge : ${patient.age} ans"
         holder.lastAppointmentText.text = "Dernière visite : ${patient.lastAppointment}"
+
+        // Rend l’item cliquable
+        holder.itemView.setOnClickListener {
+            onPatientClick(patient)
+        }
     }
 
     inner class PatientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,3 +46,4 @@ class PatientAdapter : RecyclerView.Adapter<PatientAdapter.PatientViewHolder>() 
         val lastAppointmentText: TextView = itemView.findViewById(R.id.lastAppointmentText)
     }
 }
+

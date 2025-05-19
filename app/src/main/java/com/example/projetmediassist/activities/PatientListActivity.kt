@@ -1,5 +1,6 @@
 package com.example.projetmediassist.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -21,8 +22,12 @@ class PatientListActivity : AppCompatActivity() {
         binding = ActivityPatientListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Prépare l’adapter
-        adapter = PatientAdapter()
+        // 🔵 Adapter CLIQUABLE !
+        adapter = PatientAdapter { patient ->
+            val intent = Intent(this, PatientDetailActivity::class.java)
+            intent.putExtra("patient_id", patient.id)
+            startActivity(intent)
+        }
         binding.patientRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.patientRecyclerView.adapter = adapter
 
@@ -30,16 +35,14 @@ class PatientListActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
         doctorEmail = sharedPref.getString("doctorEmail", null)
 
-        // ✅ Ouvre le fragment au clic
+        // Ouvre le fragment au clic
         binding.addPatientButton.setOnClickListener {
             val fragment = AddPatientFragment()
-
             fragment.listener = object : OnPatientAddedListener {
                 override fun onPatientAdded() {
                     refreshPatients()
                 }
             }
-
             fragment.show(supportFragmentManager, "AddPatientFragment")
         }
     }
