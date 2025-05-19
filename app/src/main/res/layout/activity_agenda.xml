@@ -28,14 +28,54 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="12dp" />
 
+    <!-- ✅ Bloc navigation semaine -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/prevWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="◀"
+            android:backgroundTint="@color/medical_blue"
+            />
+
+        <TextView
+            android:id="@+id/weekRangeText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Semaine"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/nextWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="▶"
+            android:backgroundTint="@color/medical_blue"
+            />
+
+    </LinearLayout>
+
+    <!-- Bande de jours -->
     <LinearLayout
         android:id="@+id/dayStrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Date sélectionnée -->
     <TextView
         android:id="@+id/dateLabel"
         android:layout_width="wrap_content"
@@ -45,6 +85,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
+    <!-- Liste des RDV -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/appointmentsRecycler"
         android:layout_width="match_parent"
@@ -52,8 +93,8 @@
         android:layout_weight="1"
         android:paddingTop="8dp"
         android:clipToPadding="false" />
-    
 
+    <!-- Bouton ajout RDV -->
     <Button
         android:id="@+id/addAppointmentButton"
         android:layout_width="match_parent"

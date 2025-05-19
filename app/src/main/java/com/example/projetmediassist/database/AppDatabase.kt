@@ -8,7 +8,7 @@ import com.example.projetmediassist.models.Appointment
 import com.example.projetmediassist.models.Doctor
 import com.example.projetmediassist.models.Patient
 
-@Database(entities = [Doctor::class, Patient::class, Appointment::class], version = 3)
+@Database(entities = [Doctor::class, Patient::class, Appointment::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun doctorDao(): DoctorDao

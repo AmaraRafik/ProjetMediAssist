@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "appointments")
 data class Appointment(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val doctorEmail: String, // ← DOIT exister exactement sous ce nom
-    val hour: String,
+    val doctorEmail: String,
     val patient: String,
+    val hour: String,
     val description: String,
-    val date: Long // ← DOIT exister exactement sous ce nom
+    val date: Long, // jour sélectionné
+    val timeInMillis: Long // ← ce champ va permettre le tri réel
 )

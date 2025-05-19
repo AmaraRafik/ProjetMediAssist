@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projetmediassist.R
 import com.example.projetmediassist.adapters.AppointmentAdapter
 import com.example.projetmediassist.database.AppDatabase
+import com.example.projetmediassist.fragments.AddAppointmentFragment
+import com.example.projetmediassist.fragments.OnAppointmentAddedListener
 import com.example.projetmediassist.models.Appointment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +34,8 @@ class AgendaActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AppointmentAdapter
     private lateinit var doctorEmail: String
+    private var weekOffset = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,48 +51,90 @@ class AgendaActivity : AppCompatActivity() {
         db = AppDatabase.getDatabase(this)
         recyclerView = findViewById(R.id.appointmentsRecycler)
 
-        val dayStrip = findViewById<LinearLayout>(R.id.dayStrip)
-        val monthText = findViewById<TextView>(R.id.monthText)
-        val dateLabel = findViewById<TextView>(R.id.dateLabel)
+        // ⏪ Boutons de navigation semaine
+        findViewById<Button>(R.id.prevWeekButton).setOnClickListener {
+            weekOffset--
+            renderWeek(weekOffset)
+        }
 
-        val today = Calendar.getInstance()
-        val monthFormat = SimpleDateFormat("MMMM yyyy", Locale("fr"))
-        monthText.text = monthFormat.format(today.time)
+        findViewById<Button>(R.id.nextWeekButton).setOnClickListener {
+            weekOffset++
+            renderWeek(weekOffset)
+        }
+
+        // 🔁 Affiche la semaine actuelle
+        renderWeek(weekOffset)
+
+        // ➕ Ajout de rendez-vous
+        val addButton = findViewById<Button>(R.id.addAppointmentButton)
+        addButton.setOnClickListener {
+            val selected = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
+            selected.set(Calendar.HOUR_OF_DAY, 0)
+            selected.set(Calendar.MINUTE, 0)
+            selected.set(Calendar.SECOND, 0)
+            selected.set(Calendar.MILLISECOND, 0)
+
+            val fragment = AddAppointmentFragment()
+            fragment.selectedDate = selected.timeInMillis
+
+            fragment.listener = object : OnAppointmentAddedListener {
+                override fun onAppointmentAdded() {
+                    loadAppointments(selected.timeInMillis)
+                }
+            }
+
+            fragment.show(supportFragmentManager, "AddAppointmentFragment")
+        }
+    }
+
+    private fun renderWeek(offset: Int) {
+        val dayStrip = findViewById<LinearLayout>(R.id.dayStrip)
+        val dateLabel = findViewById<TextView>(R.id.dateLabel)
+        val weekText = findViewById<TextView>(R.id.weekRangeText)
+        val monthText = findViewById<TextView>(R.id.monthText)
+
+        dayStrip.removeAllViews()
 
         val dayFormat = SimpleDateFormat("EEE", Locale("fr"))
         val dateFormat = SimpleDateFormat("d", Locale("fr"))
         val labelFormat = SimpleDateFormat("EEEE d MMMM", Locale("fr"))
+        val rangeFormat = SimpleDateFormat("dd MMM", Locale("fr"))
+        val monthFormat = SimpleDateFormat("MMMM yyyy", Locale("fr"))
 
-        val currentDay = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
+        calendar.firstDayOfWeek = Calendar.MONDAY
+        calendar.add(Calendar.WEEK_OF_YEAR, offset)
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+
+        val startDate = calendar.clone() as Calendar
+
+        val startText = rangeFormat.format(startDate.time)
 
         for (i in 0 until 7) {
-            val dayName = dayFormat.format(currentDay.time).uppercase()
-            val dayNumber = dateFormat.format(currentDay.time)
+            val clone = calendar.clone() as Calendar
+            val dayName = dayFormat.format(clone.time).uppercase()
+            val dayNumber = dateFormat.format(clone.time)
 
             val dayView = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
-                    setMargins(2, 0, 2, 0)
+                    setMargins(6, 0, 6, 0)
                 }
 
-                setPadding(4, 8, 4, 8)
+                setPadding(8, 16, 8, 16)
                 gravity = Gravity.CENTER
-                setTypeface(null, Typeface.BOLD)
                 textSize = 14f
-                textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                maxLines = 2
                 text = "$dayName\n$dayNumber"
-                tag = currentDay.clone()
+                typeface = Typeface.DEFAULT_BOLD
+                tag = clone
 
+                // style si sélectionné
                 if (i == 0) {
+                    selectedDayView = this
+                    selectedDate = clone
                     setBackgroundResource(R.drawable.selected_day_background)
                     setTextColor(Color.WHITE)
-                    selectedDayView = this
-                    selectedDate = currentDay.clone() as Calendar
-                    dateLabel.text = labelFormat.format(currentDay.time).replaceFirstChar { it.uppercase() }
-
-                    loadAppointments(currentDay.timeInMillis)
-                } else {
-                    setTextColor(Color.BLACK)
+                    dateLabel.text = labelFormat.format(clone.time).replaceFirstChar { it.uppercase() }
+                    loadAppointments(clone.timeInMillis)
                 }
 
                 setOnClickListener {
@@ -97,55 +143,35 @@ class AgendaActivity : AppCompatActivity() {
 
                     setBackgroundResource(R.drawable.selected_day_background)
                     setTextColor(Color.WHITE)
-
                     selectedDayView = this
-                    selectedDate = this.tag as Calendar
 
-                    val formatted = labelFormat.format(selectedDate!!.time)
-                    dateLabel.text = formatted.replaceFirstChar { it.uppercase() }
-
-                    val normalized = (selectedDate as Calendar).apply {
+                    val normalized = (clone.clone() as Calendar).apply {
                         set(Calendar.HOUR_OF_DAY, 0)
                         set(Calendar.MINUTE, 0)
                         set(Calendar.SECOND, 0)
                         set(Calendar.MILLISECOND, 0)
                     }
+                    selectedDate = normalized
+
+                    dateLabel.text = labelFormat.format(normalized.time).replaceFirstChar { it.uppercase() }
                     loadAppointments(normalized.timeInMillis)
                 }
+
+                if (i == 0) performClick()
+
+
             }
 
             dayStrip.addView(dayView)
-            currentDay.add(Calendar.DAY_OF_MONTH, 1)
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        val addButton = findViewById<Button>(R.id.addAppointmentButton)
-        addButton.setOnClickListener {
-            insertAppointmentForToday()
-        }
+        val endText = rangeFormat.format(calendar.time)
+        weekText.text = "$startText - $endText"
+        monthText.text = monthFormat.format(calendar.time)
     }
 
-    private fun insertAppointmentForToday() {
-        val today = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
-        today.set(Calendar.HOUR_OF_DAY, 0)
-        today.set(Calendar.MINUTE, 0)
-        today.set(Calendar.SECOND, 0)
-        today.set(Calendar.MILLISECOND, 0)
 
-        val newAppointment = Appointment(
-            doctorEmail = doctorEmail,
-            hour = "14:00",
-            patient = "Nouveau Patient",
-            description = "Consultation ajoutée manuellement",
-            date = today.timeInMillis
-        )
-
-        lifecycleScope.launch {
-            db.appointmentDao().insert(newAppointment)
-            withContext(Dispatchers.Main) {
-                loadAppointments(today.timeInMillis)
-            }
-        }
-    }
 
     private fun loadAppointments(date: Long) {
         lifecycleScope.launch {
@@ -172,10 +198,10 @@ class AgendaActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
 
-        // Recharge les RDV du jour sélectionné si possible
         val today = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
         today.set(Calendar.HOUR_OF_DAY, 0)
         today.set(Calendar.MINUTE, 0)
