@@ -39,7 +39,10 @@ class LoginActivity : AppCompatActivity() {
                             else -> {
                                 // ✅ Enregistrement de l'email du médecin dans SharedPreferences
                                 val prefs = getSharedPreferences("session", MODE_PRIVATE)
-                                prefs.edit().putString("doctorEmail", doctor.email).apply()
+                                prefs.edit()
+                                    .putString("doctorEmail", doctor.email)
+                                    .putString("doctorName", doctor.fullName) // AJOUTÉ !
+                                    .apply()
 
                                 val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
                                 intent.putExtra("doctorName", doctor.fullName)

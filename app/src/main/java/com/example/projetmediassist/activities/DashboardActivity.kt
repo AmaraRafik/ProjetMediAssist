@@ -2,10 +2,9 @@ package com.example.projetmediassist.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projetmediassist.R
 
@@ -33,8 +32,7 @@ class DashboardActivity : AppCompatActivity() {
 
 
         modesCard.setOnClickListener {
-            // À adapter avec ton activité réelle
-            Toast.makeText(this, "Modes intelligents à venir", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SmartModesActivity::class.java))
         }
 
         //val settingsCard = findViewById<LinearLayout>(R.id.settingsCard)

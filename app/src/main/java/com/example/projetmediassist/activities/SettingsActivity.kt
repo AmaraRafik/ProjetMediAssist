@@ -36,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this, "Changement de langue à venir", Toast.LENGTH_SHORT).show()
         }
 
-        val notificationSwitch = findViewById<Switch>(R.id.notificationSwitch)
+        val notificationSwitch = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.notificationSwitch)
         notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             Toast.makeText(this, if (isChecked) "Notifications activées" else "Notifications désactivées", Toast.LENGTH_SHORT).show()
         }

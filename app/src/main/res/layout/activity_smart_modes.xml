@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Titre -->
+        <TextView
+            android:id="@+id/smartModesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modes intelligents"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Mode actuel -->
+        <TextView
+            android:id="@+id/currentModeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mode actuel : En consultation"
+            android:textSize="16sp"
+            android:textColor="#555"
+            android:layout_marginBottom="18dp" />
+
+        <!-- Visite à domicile -->
+        <LinearLayout
+            android:id="@+id/homeVisitLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/rounded_border"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_home"
+                android:contentDescription="Visite à domicile"
+                android:layout_marginEnd="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visite à domicile"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Ne pas déranger -->
+        <LinearLayout
+            android:id="@+id/doNotDisturbLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/rounded_border"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_do_not_disturb_on"
+                android:contentDescription="Ne pas déranger"
+                android:layout_marginEnd="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ne pas déranger"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Absent -->
+        <LinearLayout
+            android:id="@+id/absentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_border"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_mail"
+                    android:contentDescription="Absent"
+                    android:layout_marginEnd="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Absent"
+                    android:textSize="17sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Message personnalisé -->
+            <EditText
+                android:id="@+id/absentMessageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Message personnalisé"
+                android:background="@drawable/edittext_background"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="15sp"/>
+
+            <!-- Bouton Configurer créneaux -->
+            <Button
+                android:id="@+id/configureSlotsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Configurer créneaux"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/medical_blue"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

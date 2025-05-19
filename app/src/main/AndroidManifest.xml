@@ -40,6 +40,8 @@
         <activity android:name=".activities.AgendaActivity" />
         <activity android:name=".activities.PatientListActivity" android:exported="true" />
         <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.SmartModesActivity" android:exported="true" />
+
 
 
 
