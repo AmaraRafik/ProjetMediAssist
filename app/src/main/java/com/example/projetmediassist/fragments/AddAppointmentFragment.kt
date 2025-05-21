@@ -1,5 +1,6 @@
 package com.example.projetmediassist.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,14 @@ class AddAppointmentFragment : DialogFragment() {
     var listener: OnAppointmentAddedListener? = null
     var selectedDate: Long = System.currentTimeMillis()
 
+    // ---- AJOUT pour rendre l'arrière-plan transparent ----
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        return dialog
+    }
+    // -----------------------------------------------------
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +44,14 @@ class AddAppointmentFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Prérenseigne le nom du patient si présent dans arguments (depuis la fiche patient)
+        val prefillPatientName = arguments?.getString("prefill_patient_name")
+        if (!prefillPatientName.isNullOrBlank()) {
+            binding.patientEditText.setText(prefillPatientName)
+            // Optionnel : rendre non modifiable
+            // binding.patientEditText.isEnabled = false
+        }
 
         val prefs = requireActivity().getSharedPreferences("session", 0)
         val doctorEmail = prefs.getString("doctorEmail", null)
@@ -49,7 +66,7 @@ class AddAppointmentFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // ✅ Convertir heure en timeInMillis
+            // Convertir heure en timeInMillis
             val cal = Calendar.getInstance()
             cal.timeInMillis = selectedDate
 
@@ -70,7 +87,7 @@ class AddAppointmentFragment : DialogFragment() {
                 hour = hour,
                 description = description,
                 date = selectedDate,
-                timeInMillis = timeInMillis // ✅ utilisé pour le tri
+                timeInMillis = timeInMillis // utilisé pour le tri
             )
 
             val db = AppDatabase.getDatabase(requireContext())

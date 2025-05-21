@@ -7,6 +7,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projetmediassist.R
+import android.content.Intent
+
 
 class SmartModesActivity : AppCompatActivity() {
     private lateinit var currentModeText: TextView
@@ -35,7 +37,11 @@ class SmartModesActivity : AppCompatActivity() {
         homeVisitLayout.setOnClickListener {
             currentMode = "Visite à domicile"
             updateCurrentMode()
+            // Démarrer l'activité HomeVisitActivity
+            val intent = Intent(this, HomeVisitActivity::class.java)
+            startActivity(intent)
         }
+
 
         doNotDisturbLayout.setOnClickListener {
             currentMode = "Ne pas déranger"

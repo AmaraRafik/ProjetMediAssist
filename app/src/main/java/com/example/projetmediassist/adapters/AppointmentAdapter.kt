@@ -10,7 +10,8 @@ import com.example.projetmediassist.models.Appointment
 
 class AppointmentAdapter(
     private val items: List<Appointment>,
-    private val onDelete: (Appointment) -> Unit
+    private val onDelete: (Appointment) -> Unit,
+    private val onItemClick: (Appointment) -> Unit // <-- AJOUTÉ
 ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     class AppointmentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,7 +32,12 @@ class AppointmentAdapter(
         holder.patientText.text = appointment.patient
         holder.descriptionText.text = appointment.description
 
-        // Clic long pour suppression
+        // Clic court : ouvrir détails
+        holder.itemView.setOnClickListener {
+            onItemClick(appointment)
+        }
+
+        // Clic long : suppression
         holder.itemView.setOnLongClickListener {
             onDelete(appointment)
             true

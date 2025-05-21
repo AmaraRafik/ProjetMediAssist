@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.projetmediassist.R
@@ -50,6 +49,12 @@ class DashboardActivity : AppCompatActivity() {
         findViewById<LinearLayout>(R.id.settingsCard).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 🔵 Recharge le prochain RDV dès qu’on revient sur le dashboard !
+        loadNextAppointment()
     }
 
     private fun loadNextAppointment() {

@@ -1,9 +1,9 @@
 package com.example.projetmediassist.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.databinding.ActivityPatientDetailBinding
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class PatientDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPatientDetailBinding
+    private var patientName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class PatientDetailActivity : AppCompatActivity() {
             val patient = db.patientDao().getPatientById(patientId)
             withContext(Dispatchers.Main) {
                 if (patient != null) {
+                    patientName = patient.fullName
                     binding.fullNameText.text = patient.fullName
                     binding.patientAgeText.text = "${patient.age} ans"
                     binding.phoneText.text = patient.phone ?: "-"
@@ -46,10 +48,14 @@ class PatientDetailActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: Actions sur les boutons
+        // Quand on clique sur "Créer un rendez-vous"
         binding.appointmentButton.setOnClickListener {
-            Toast.makeText(this, "À implémenter : prise de rendez-vous", Toast.LENGTH_SHORT).show()
+            // On passe le nom du patient à AgendaActivity
+            val intent = Intent(this, AgendaActivity::class.java)
+            intent.putExtra("prefill_patient_name", patientName)
+            startActivity(intent)
         }
+
         binding.medicalHistoryButton.setOnClickListener {
             Toast.makeText(this, "À implémenter : historique médical", Toast.LENGTH_SHORT).show()
         }

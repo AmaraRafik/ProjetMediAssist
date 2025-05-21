@@ -23,4 +23,10 @@ interface AppointmentDao {
 
     @Delete
     suspend fun delete(appointment: Appointment)
+
+    @Query("SELECT * FROM appointments WHERE doctorEmail = :email ORDER BY timeInMillis ASC")
+    suspend fun getAppointmentsForDoctor(email: String): List<Appointment>
+
+    @Query("SELECT * FROM appointments WHERE id = :id LIMIT 1")
+    suspend fun getAppointmentById(id: Int): Appointment?
 }

@@ -55,6 +55,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.play.services.maps)
     kapt("androidx.room:room-compiler:2.6.1")
 
 
@@ -67,6 +68,12 @@ dependencies {
 
     // Optionnel : Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // OkHttp pour requêtes HTTP
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    // org.json pour parser le JSON
+    implementation("org.json:json:20210307")
 
     // Tests
     testImplementation(libs.junit)

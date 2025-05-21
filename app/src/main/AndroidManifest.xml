@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +13,9 @@
         android:theme="@style/Theme.ProjetMediAssist"
         tools:targetApi="31">
 
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".activities.SplashActivity"
@@ -37,12 +39,14 @@
         <activity android:name=".activities.LoginActivity" android:exported="true" />
         <activity android:name=".activities.RegisterActivity" android:exported="true" />
         <activity android:name=".activities.DashboardActivity" android:exported="true" />
-        <activity android:name=".activities.AgendaActivity" />
+        <activity android:name=".activities.AgendaActivity" android:exported="true" />
         <activity android:name=".activities.PatientListActivity" android:exported="true" />
-        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.SettingsActivity" android:exported="true" />
         <activity android:name=".activities.SmartModesActivity" android:exported="true" />
         <activity android:name=".activities.PatientDetailActivity" android:exported="true" />
-
+        <activity android:name=".activities.HomeVisitActivity" android:exported="true" />
+        <activity android:name=".activities.DetailAppointmentActivity" android:exported="true"/>
+        <activity android:name=".activities.ConsultationActivity"/>
 
 
 

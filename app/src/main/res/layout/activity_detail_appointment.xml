@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/detailTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Détail RDV"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_marginBottom="28dp"
+        android:textColor="@android:color/black" />
+
+    <!-- Bloc entouré (CardView) pour infos RDV -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/patientNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nom Prénom"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/dateHourText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date heure"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp"
+                android:textColor="#444" />
+
+            <TextView
+                android:id="@+id/visitTypeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Visite à domicile"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp"
+                android:textColor="#222" />
+
+            <TextView
+                android:id="@+id/addressText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Adresse"
+                android:textSize="16sp"
+                android:textColor="#777" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Bouton bleu rempli -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewPatientBtn"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Voir fiche patient"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="24dp"
+        android:backgroundTint="@color/medical_blue"
+        style="@style/Widget.MaterialComponents.Button"
+        app:iconPadding="0dp" />
+
+    <!-- Bouton contour bleu -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/startConsultationBtn"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Commencer consultation"
+        android:textColor="@color/medical_blue"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="24dp"
+        app:strokeColor="@color/medical_blue"
+        app:strokeWidth="2dp"
+        android:backgroundTint="@android:color/white"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:iconPadding="0dp" />
+
+</LinearLayout>

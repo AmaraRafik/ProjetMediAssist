@@ -1,6 +1,7 @@
 package com.example.projetmediassist.activities
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -36,10 +37,15 @@ class AgendaActivity : AppCompatActivity() {
     private lateinit var doctorEmail: String
     private var weekOffset = 0
 
+    // Ajout : stocker le nom du patient à pré-remplir (si fourni)
+    private var prefillPatientName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agenda)
+
+        // Récupérer l’éventuel nom à pré-remplir
+        prefillPatientName = intent.getStringExtra("prefill_patient_name")
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = prefs.getString("doctorEmail", null) ?: run {
@@ -51,7 +57,6 @@ class AgendaActivity : AppCompatActivity() {
         db = AppDatabase.getDatabase(this)
         recyclerView = findViewById(R.id.appointmentsRecycler)
 
-        // ⏪ Boutons de navigation semaine
         findViewById<Button>(R.id.prevWeekButton).setOnClickListener {
             weekOffset--
             renderWeek(weekOffset)
@@ -62,10 +67,8 @@ class AgendaActivity : AppCompatActivity() {
             renderWeek(weekOffset)
         }
 
-        // 🔁 Affiche la semaine actuelle
         renderWeek(weekOffset)
 
-        // ➕ Ajout de rendez-vous
         val addButton = findViewById<Button>(R.id.addAppointmentButton)
         addButton.setOnClickListener {
             val selected = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
@@ -74,8 +77,16 @@ class AgendaActivity : AppCompatActivity() {
             selected.set(Calendar.SECOND, 0)
             selected.set(Calendar.MILLISECOND, 0)
 
+            // Utiliser le fragment avec pré-remplissage si besoin
             val fragment = AddAppointmentFragment()
             fragment.selectedDate = selected.timeInMillis
+
+            // Ajout du pré-remplissage du patient
+            if (!prefillPatientName.isNullOrBlank()) {
+                val args = Bundle()
+                args.putString("prefill_patient_name", prefillPatientName)
+                fragment.arguments = args
+            }
 
             fragment.listener = object : OnAppointmentAddedListener {
                 override fun onAppointmentAdded() {
@@ -110,6 +121,15 @@ class AgendaActivity : AppCompatActivity() {
 
         val startText = rangeFormat.format(startDate.time)
 
+        // NEW: date du jour "normalisée" (sans l'heure)
+        val today = Calendar.getInstance()
+        today.set(Calendar.HOUR_OF_DAY, 0)
+        today.set(Calendar.MINUTE, 0)
+        today.set(Calendar.SECOND, 0)
+        today.set(Calendar.MILLISECOND, 0)
+
+        var todayWasSelected = false
+
         for (i in 0 until 7) {
             val clone = calendar.clone() as Calendar
             val dayName = dayFormat.format(clone.time).uppercase()
@@ -119,7 +139,6 @@ class AgendaActivity : AppCompatActivity() {
                 layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
                     setMargins(6, 0, 6, 0)
                 }
-
                 setPadding(8, 16, 8, 16)
                 gravity = Gravity.CENTER
                 textSize = 14f
@@ -127,14 +146,19 @@ class AgendaActivity : AppCompatActivity() {
                 typeface = Typeface.DEFAULT_BOLD
                 tag = clone
 
-                // style si sélectionné
-                if (i == 0) {
+                // *** Changement ici : sélectionne aujourd'hui par défaut ***
+                val isToday =
+                    clone.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                            clone.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
+
+                if (isToday && !todayWasSelected) {
                     selectedDayView = this
                     selectedDate = clone
                     setBackgroundResource(R.drawable.selected_day_background)
                     setTextColor(Color.WHITE)
                     dateLabel.text = labelFormat.format(clone.time).replaceFirstChar { it.uppercase() }
                     loadAppointments(clone.timeInMillis)
+                    todayWasSelected = true
                 }
 
                 setOnClickListener {
@@ -156,10 +180,6 @@ class AgendaActivity : AppCompatActivity() {
                     dateLabel.text = labelFormat.format(normalized.time).replaceFirstChar { it.uppercase() }
                     loadAppointments(normalized.timeInMillis)
                 }
-
-                if (i == 0) performClick()
-
-
             }
 
             dayStrip.addView(dayView)
@@ -172,27 +192,34 @@ class AgendaActivity : AppCompatActivity() {
     }
 
 
-
     private fun loadAppointments(date: Long) {
         lifecycleScope.launch {
             val list = db.appointmentDao().getAppointmentsForDoctorOnDate(doctorEmail, date)
 
             withContext(Dispatchers.Main) {
-                adapter = AppointmentAdapter(list) { appointmentToDelete ->
-                    AlertDialog.Builder(this@AgendaActivity)
-                        .setTitle("Supprimer le rendez-vous")
-                        .setMessage("Voulez-vous vraiment supprimer ce rendez-vous ?")
-                        .setPositiveButton("Oui") { _, _ ->
-                            lifecycleScope.launch {
-                                db.appointmentDao().delete(appointmentToDelete)
-                                withContext(Dispatchers.Main) {
-                                    loadAppointments(date)
+                adapter = AppointmentAdapter(
+                    list,
+                    { appointmentToDelete ->
+                        AlertDialog.Builder(this@AgendaActivity)
+                            .setTitle("Supprimer le rendez-vous")
+                            .setMessage("Voulez-vous vraiment supprimer ce rendez-vous ?")
+                            .setPositiveButton("Oui") { _, _ ->
+                                lifecycleScope.launch {
+                                    db.appointmentDao().delete(appointmentToDelete)
+                                    withContext(Dispatchers.Main) {
+                                        loadAppointments(date)
+                                    }
                                 }
                             }
-                        }
-                        .setNegativeButton("Non", null)
-                        .show()
-                }
+                            .setNegativeButton("Non", null)
+                            .show()
+                    },
+                    { clickedAppointment ->
+                        val intent = Intent(this@AgendaActivity, DetailAppointmentActivity::class.java)
+                        intent.putExtra("APPOINTMENT_ID", clickedAppointment.id)
+                        startActivity(intent)
+                    }
+                )
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(this@AgendaActivity)
             }

@@ -26,6 +26,16 @@ class AddPatientFragment : DialogFragment() {
     // Le callback que l’activité peut définir
     var listener: OnPatientAddedListener? = null
 
+    companion object {
+        fun newInstance(fullName: String?): AddPatientFragment {
+            val fragment = AddPatientFragment()
+            val args = Bundle()
+            args.putString("full_name", fullName)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -42,6 +52,12 @@ class AddPatientFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Prérenseigne le champ nom si argument présent
+        arguments?.getString("full_name")?.let {
+            binding.fullNameEditText.setText(it)
+        }
+        // Pour d'autres champs à l'avenir, faire de même avec d'autres clés (phone, email...)
 
         val prefs = requireActivity().getSharedPreferences("session", 0)
         val doctorEmail = prefs.getString("doctorEmail", null)
@@ -90,6 +106,7 @@ class AddPatientFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(

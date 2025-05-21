@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_home_visit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:padding="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visite à domicile"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Carte Google Maps -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <TextView
+        android:id="@+id/home_visit_section_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RDV à domicile"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingLeft="18dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="4dp"
+        android:textColor="#222"/>
+
+    <!-- Liste des visites à domicile -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_visit_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+</LinearLayout>
