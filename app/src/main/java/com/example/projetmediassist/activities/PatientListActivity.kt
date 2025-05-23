@@ -32,7 +32,7 @@ class PatientListActivity : AppCompatActivity() {
         binding.patientRecyclerView.adapter = adapter
 
         // Récupère l’email du médecin connecté (depuis la session)
-        val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = sharedPref.getString("doctorEmail", null)
 
         // Ouvre le fragment au clic

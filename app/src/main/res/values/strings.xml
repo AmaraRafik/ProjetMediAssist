@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ProjetMediAssist</string>
+    <string name="aucun_diagnostic">Aucun diagnostic détecté</string>
 
 </resources>

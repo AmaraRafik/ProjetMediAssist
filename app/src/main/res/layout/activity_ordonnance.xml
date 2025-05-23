@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="22dp">
+
+    <!-- Partie principale (scrollable si besoin) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <!-- Titre -->
+        <TextView
+            android:id="@+id/ordonnanceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ordonnance"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/medical_blue"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Patient -->
+        <TextView
+            android:id="@+id/patientNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom du patient"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginBottom="7dp"/>
+
+        <!-- Diagnostic -->
+        <TextView
+            android:id="@+id/diagnosticTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Diagnostic :"
+            android:textColor="@color/medical_blue"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="1dp"/>
+
+        <TextView
+            android:id="@+id/diagnosticText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom de la maladie"
+            android:textColor="#333"
+            android:textSize="16sp"
+            android:layout_marginBottom="17dp"/>
+
+        <!-- Liste des médicaments -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Médicaments proposés"
+            android:textColor="@color/medical_blue"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/medicamentsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="340dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Bouton ajouter médicament -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addMedicamentBtn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Ajouter un médicament"
+            android:textColor="@color/medical_blue"
+            app:cornerRadius="24dp"
+            app:strokeColor="@color/medical_blue"
+            app:strokeWidth="2dp"
+            android:backgroundTint="@android:color/white"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="5dp"/>
+
+        <!-- ALERTE GLOBALE sous la liste des médicaments -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/globalAlertCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="2dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:background="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="#FFF2F1">
+
+                <TextView
+                    android:id="@+id/globalAlertIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️"
+                    android:textSize="25sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@android:color/holo_red_dark" />
+
+                <TextView
+                    android:id="@+id/globalAlertText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ALERTE"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- Boutons fixes en bas -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/envoyerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Envoyer au patient / pharmacie"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/medical_blue"
+        app:cornerRadius="24dp"
+        style="@style/Widget.MaterialComponents.Button"
+        app:iconPadding="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveOrdonnanceBtn"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Enregistrer l'ordonnance"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/medical_blue"
+        app:cornerRadius="24dp"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"/>
+</LinearLayout>

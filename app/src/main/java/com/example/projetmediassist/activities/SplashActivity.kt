@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.R
+import com.example.projetmediassist.utils.MedicalDatabaseInitializer
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
@@ -23,11 +24,24 @@ class SplashActivity : AppCompatActivity() {
     private fun checkSessionAndStart() {
         val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
         val savedEmail = sharedPref.getString("doctorEmail", null)
+        val firstLaunch = sharedPref.getBoolean("first_medical_data", true)
+        val db = AppDatabase.getDatabase(this)
 
+        if (firstLaunch) {
+            // Insère la base médicale
+            MedicalDatabaseInitializer.peuplerBaseMedicaleSiVide(this) {
+                // Update flag pour ne pas réinsérer à chaque lancement
+                sharedPref.edit().putBoolean("first_medical_data", false).apply()
+                goToNextScreen(savedEmail, db)
+            }
+        } else {
+            goToNextScreen(savedEmail, db)
+        }
+    }
+
+    private fun goToNextScreen(savedEmail: String?, db: AppDatabase) {
         if (savedEmail != null) {
-            // Vérifie en base que le médecin existe toujours
             lifecycleScope.launch {
-                val db = AppDatabase.getDatabase(this@SplashActivity)
                 val doctor = db.doctorDao().getDoctorByEmail(savedEmail)
                 if (doctor != null) {
                     val intent = Intent(this@SplashActivity, DashboardActivity::class.java)
@@ -35,13 +49,11 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                    // Session invalide, retour au login
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     finish()
                 }
             }
         } else {
-            // Pas de session, direction Login
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }

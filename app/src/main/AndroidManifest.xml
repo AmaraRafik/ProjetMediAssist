@@ -47,6 +47,9 @@
         <activity android:name=".activities.HomeVisitActivity" android:exported="true" />
         <activity android:name=".activities.DetailAppointmentActivity" android:exported="true"/>
         <activity android:name=".activities.ConsultationActivity"/>
+        <activity android:name=".activities.OrdonnanceActivity" />
+        <activity android:name=".activities.PatientMedicalHistoryActivity"
+            android:exported="false"/>
 
 
 

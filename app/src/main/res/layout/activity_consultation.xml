@@ -61,26 +61,66 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Champ symptômes (agrandi) -->
+    <!-- Champ texte patient (NON éditable) -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Symptômes observés"
+        android:text="Texte du patient (reconnaissance vocale)"
         android:textSize="15sp"
         android:textColor="#666"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"/>
 
-    <EditText
-        android:id="@+id/symptomsEditText"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="Toux, fièvre..."
-        android:background="@drawable/edittext_background"
-        android:textSize="16sp"
-        android:padding="14dp"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="14dp"
+        card_view:cardElevation="3dp"
         android:layout_marginBottom="18dp"
-        android:inputType="textMultiLine"/>
+        android:background="@android:color/white">
+
+        <EditText
+            android:id="@+id/speechTextEditText"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:hint="Ce que le patient dit..."
+            android:background="@android:color/transparent"
+            android:textSize="16sp"
+            android:padding="14dp"
+            android:inputType="textMultiLine"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:longClickable="false"
+            android:editable="false"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Champ symptômes détectés (éditable, séparés par virgules, CardView) -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Symptômes détectés"
+        android:textSize="15sp"
+        android:textColor="@color/medical_blue"
+        android:layout_marginBottom="4dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="14dp"
+        card_view:cardElevation="3dp"
+        android:layout_marginBottom="18dp"
+        android:background="@android:color/white">
+
+        <EditText
+            android:id="@+id/detectedSymptomsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="fièvre, toux..."
+            android:background="@android:color/transparent"
+            android:textSize="16sp"
+            android:padding="14dp"
+            android:inputType="textMultiLine"/>
+    </androidx.cardview.widget.CardView>
 
     <!-- CardView Diagnostic -->
     <androidx.cardview.widget.CardView
@@ -109,13 +149,19 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="3dp"/>
 
-            <TextView
+            <!-- DIAGNOSTIC EDITABLE -->
+            <EditText
                 android:id="@+id/diagnosticText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bronchite virale"
+                android:text="Diagnostic..."
                 android:textColor="#333"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:background="@android:color/transparent"
+                android:inputType="textCapSentences"
+                android:padding="0dp"
+                android:singleLine="true"
+                android:hint="Diagnostic potentiel..." />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

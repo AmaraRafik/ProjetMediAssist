@@ -57,7 +57,10 @@ class PatientDetailActivity : AppCompatActivity() {
         }
 
         binding.medicalHistoryButton.setOnClickListener {
-            Toast.makeText(this, "À implémenter : historique médical", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, PatientMedicalHistoryActivity::class.java)
+            intent.putExtra("patient_name", patientName) // ou patient_id si tu préfères
+            startActivity(intent)
         }
+
     }
 }

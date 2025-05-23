@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- CONTENU PRINCIPAL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="22dp">
+
+        <!-- Titre principal centré et bleu -->
+        <TextView
+            android:id="@+id/historyMainTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Historique des consultations"
+            android:textStyle="bold"
+            android:textSize="26sp"
+            android:textColor="@color/medical_blue"
+            android:gravity="center"
+            android:layout_marginBottom="26dp"/>
+
+        <!-- Patient : Nom -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="18dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Patient : "
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/patientNameTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom du patient"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"/>
+        </LinearLayout>
+
+        <!-- Liste des ordonnances -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ordonnanceRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp"
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
+
+    <!-- OVERLAY FOND SEMI-TRANSPARENT ET CARTE CENTRÉE (popup) -->
+    <FrameLayout
+        android:id="@+id/detailOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/detailCard"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@android:color/white"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <!-- Date -->
+                <TextView
+                    android:id="@+id/detailDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date :"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="@color/medical_blue"
+                    android:layout_marginBottom="10dp"/>
+
+                <!-- Patient -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Patient : "
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/detailPatient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <!-- Docteur -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Docteur : "
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/detailDoctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <!-- Diagnostic -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Diagnostic : "
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/detailDiagnostic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <!-- Médicaments -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Médicaments prescrits :"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="2dp"/>
+                <TextView
+                    android:id="@+id/detailMeds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="2dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</FrameLayout>
