@@ -21,6 +21,7 @@ import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.fragments.AddAppointmentFragment
 import com.example.projetmediassist.fragments.OnAppointmentAddedListener
 import com.example.projetmediassist.models.Appointment
+import com.example.projetmediassist.utils.NotificationUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -205,9 +206,21 @@ class AgendaActivity : AppCompatActivity() {
                             .setMessage("Voulez-vous vraiment supprimer ce rendez-vous ?")
                             .setPositiveButton("Oui") { _, _ ->
                                 lifecycleScope.launch {
+                                    // 🧼 Annule les notifications prévues
+                                    NotificationUtils.cancelAppointmentNotifications(
+                                        context = this@AgendaActivity,
+                                        appointmentTime = appointmentToDelete.timeInMillis
+                                    )
+
                                     db.appointmentDao().delete(appointmentToDelete)
+
                                     withContext(Dispatchers.Main) {
                                         loadAppointments(date)
+                                        Toast.makeText(
+                                            this@AgendaActivity,
+                                            "RDV supprimé et notifs annulées",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
                             }
@@ -225,6 +238,7 @@ class AgendaActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onResume() {
         super.onResume()

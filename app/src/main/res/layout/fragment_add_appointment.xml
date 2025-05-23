@@ -36,6 +36,17 @@
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="16dp" />
 
+        <!-- ✅ Champ Email ajouté -->
+        <EditText
+            android:id="@+id/patientEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email du patient"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:layout_marginBottom="16dp" />
+
         <EditText
             android:id="@+id/hourEditText"
             android:layout_width="match_parent"

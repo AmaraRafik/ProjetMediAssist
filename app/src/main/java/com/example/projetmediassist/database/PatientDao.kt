@@ -19,4 +19,8 @@ interface PatientDao {
     @Query("SELECT * FROM patients WHERE fullName = :fullName LIMIT 1")
     suspend fun getPatientByFullName(fullName: String): Patient?
 
+    @Query("SELECT * FROM patients WHERE fullName = :name LIMIT 1")
+    suspend fun getPatientByName(name: String): Patient?
+
+
 }

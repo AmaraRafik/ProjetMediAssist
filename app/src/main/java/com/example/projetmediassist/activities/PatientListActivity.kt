@@ -22,7 +22,7 @@ class PatientListActivity : AppCompatActivity() {
         binding = ActivityPatientListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 🔵 Adapter CLIQUABLE !
+        //  Adapter CLIQUABLE !
         adapter = PatientAdapter { patient ->
             val intent = Intent(this, PatientDetailActivity::class.java)
             intent.putExtra("patient_id", patient.id)

@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.databinding.FragmentAddAppointmentBinding
 import com.example.projetmediassist.models.Appointment
+import com.example.projetmediassist.utils.NotificationUtils
 import kotlinx.coroutines.launch
 import java.util.*
+import android.util.Log
 
 interface OnAppointmentAddedListener {
     fun onAppointmentAdded()
@@ -26,13 +28,11 @@ class AddAppointmentFragment : DialogFragment() {
     var listener: OnAppointmentAddedListener? = null
     var selectedDate: Long = System.currentTimeMillis()
 
-    // ---- AJOUT pour rendre l'arrière-plan transparent ----
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return dialog
     }
-    // -----------------------------------------------------
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +45,9 @@ class AddAppointmentFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Prérenseigne le nom du patient si présent dans arguments (depuis la fiche patient)
         val prefillPatientName = arguments?.getString("prefill_patient_name")
         if (!prefillPatientName.isNullOrBlank()) {
             binding.patientEditText.setText(prefillPatientName)
-            // Optionnel : rendre non modifiable
-            // binding.patientEditText.isEnabled = false
         }
 
         val prefs = requireActivity().getSharedPreferences("session", 0)
@@ -66,7 +63,6 @@ class AddAppointmentFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            // Convertir heure en timeInMillis
             val cal = Calendar.getInstance()
             cal.timeInMillis = selectedDate
 
@@ -81,18 +77,33 @@ class AddAppointmentFragment : DialogFragment() {
 
             val timeInMillis = cal.timeInMillis
 
+            val email = binding.patientEmailEditText.text.toString().trim()
+
             val appointment = Appointment(
                 doctorEmail = doctorEmail,
                 patient = patient,
+                patientEmail = if (email.isNotEmpty()) email else null,
                 hour = hour,
                 description = description,
                 date = selectedDate,
-                timeInMillis = timeInMillis // utilisé pour le tri
+                timeInMillis = timeInMillis
             )
+
 
             val db = AppDatabase.getDatabase(requireContext())
             lifecycleScope.launch {
                 db.appointmentDao().insert(appointment)
+
+                // 🔔 Planification réelle
+                NotificationUtils.scheduleAppointmentNotifications(
+                    context = requireContext(),
+                    appointmentTime = timeInMillis,
+                    patientName = patient
+                )
+
+
+                Log.d("NOTIF", "✅ RDV enregistré et notifications programmées")
+
                 listener?.onAppointmentAdded()
                 dismiss()
                 Toast.makeText(requireContext(), "Rendez-vous ajouté", Toast.LENGTH_SHORT).show()
