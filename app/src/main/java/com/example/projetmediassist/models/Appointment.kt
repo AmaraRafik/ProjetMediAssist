@@ -9,6 +9,7 @@ data class Appointment(
     val doctorEmail: String,
     val patient: String,
     val patientEmail: String?, // ← nouveau champ
+    val patientId: Int = -1,
     val hour: String,
     val description: String,
     val date: Long,

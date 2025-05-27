@@ -27,10 +27,11 @@ class AddPatientFragment : DialogFragment() {
     var listener: OnPatientAddedListener? = null
 
     companion object {
-        fun newInstance(fullName: String?): AddPatientFragment {
+        fun newInstance(fullName: String?, email: String? = null): AddPatientFragment {
             val fragment = AddPatientFragment()
             val args = Bundle()
             args.putString("full_name", fullName)
+            args.putString("email", email)
             fragment.arguments = args
             return fragment
         }
@@ -53,10 +54,13 @@ class AddPatientFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Prérenseigne le champ nom si argument présent
         arguments?.getString("full_name")?.let {
             binding.fullNameEditText.setText(it)
         }
+        arguments?.getString("email")?.let {
+            binding.emailEditText.setText(it)
+        }
+
         // Pour d'autres champs à l'avenir, faire de même avec d'autres clés (phone, email...)
 
         val prefs = requireActivity().getSharedPreferences("session", 0)

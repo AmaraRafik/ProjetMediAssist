@@ -29,4 +29,11 @@ interface AppointmentDao {
 
     @Query("SELECT * FROM appointments WHERE id = :id LIMIT 1")
     suspend fun getAppointmentById(id: Int): Appointment?
+
+    @Query("SELECT * FROM appointments WHERE doctorEmail = :email AND timeInMillis > :fromTime ORDER BY timeInMillis ASC")
+    suspend fun getNextAppointmentsFromNow(email: String, fromTime: Long): List<Appointment>
+
+    @Query("SELECT * FROM appointments WHERE doctorEmail = :email AND timeInMillis >= :now ORDER BY timeInMillis ASC")
+    suspend fun getUpcomingAppointments(email: String, now: Long): List<Appointment>
+
 }

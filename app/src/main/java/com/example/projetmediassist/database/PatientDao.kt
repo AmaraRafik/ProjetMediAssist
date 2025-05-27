@@ -7,6 +7,7 @@ import com.example.projetmediassist.models.Patient
 
 @Dao
 interface PatientDao {
+
     @Insert
     suspend fun insert(patient: Patient): Long
 
@@ -16,11 +17,10 @@ interface PatientDao {
     @Query("SELECT * FROM patients WHERE id = :id")
     suspend fun getPatientById(id: Int): Patient?
 
-    @Query("SELECT * FROM patients WHERE fullName = :fullName LIMIT 1")
+    @Query("SELECT * FROM patients WHERE LOWER(fullName) = LOWER(:fullName) LIMIT 1")
     suspend fun getPatientByFullName(fullName: String): Patient?
 
-    @Query("SELECT * FROM patients WHERE fullName = :name LIMIT 1")
+    // ✅ Cette méthode est désormais insensible à la casse
+    @Query("SELECT * FROM patients WHERE LOWER(fullName) = LOWER(:name) LIMIT 1")
     suspend fun getPatientByName(name: String): Patient?
-
-
 }

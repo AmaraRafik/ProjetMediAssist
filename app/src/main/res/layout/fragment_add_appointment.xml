@@ -36,7 +36,6 @@
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="16dp" />
 
-        <!-- ✅ Champ Email ajouté -->
         <EditText
             android:id="@+id/patientEmailEditText"
             android:layout_width="match_parent"
@@ -56,14 +55,40 @@
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="16dp" />
 
-        <EditText
-            android:id="@+id/descriptionEditText"
+        <!-- ✅ Nouveau champ : choix du type de RDV -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type de rendez-vous"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black" />
+
+        <RadioGroup
+            android:id="@+id/descriptionRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="24dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/optionCabinet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cabinet"
+                android:textColor="@android:color/black"
+                android:buttonTint="@color/custom_radio_color"
+                android:layout_marginEnd="32dp" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/optionDomicile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Domicile"
+                android:textColor="@android:color/black"
+                android:buttonTint="@color/custom_radio_color" />
+        </RadioGroup>
+
 
         <Button
             android:id="@+id/saveAppointmentButton"

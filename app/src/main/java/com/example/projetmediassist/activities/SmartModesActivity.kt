@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.projetmediassist.database.AppDatabase
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class SmartModesActivity : AppCompatActivity() {
     private lateinit var currentModeText: TextView
@@ -71,73 +70,74 @@ class SmartModesActivity : AppCompatActivity() {
         }
 
         absentLayout.setOnClickListener {
+            if (currentMode == "Absent") {
+                currentMode = "En consultation"
+                SettingsUtils.setCurrentMode(this, currentMode)
+                updateCurrentMode()
+            }
+        }
+
+        configureSlotsButton.setOnClickListener {
             currentMode = "Absent"
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
-        }
 
-        val db = AppDatabase.getDatabase(this)
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val todayMillis = today.timeInMillis
+            val db = AppDatabase.getDatabase(this)
+            val nowMillis = System.currentTimeMillis()
 
-        lifecycleScope.launch {
-            val appointments = db.appointmentDao().getAppointmentsForDoctorOnDate(doctorEmail, todayMillis)
-            val emails = mutableListOf<String>()
+            lifecycleScope.launch {
+                val appointments = db.appointmentDao().getUpcomingAppointments(doctorEmail, nowMillis)
+                val emails = mutableSetOf<String>() // ✅ utiliser Set pour éviter les doublons
 
-            for (appt in appointments) {
-                val patient = db.patientDao().getPatientByName(appt.patient)
-                patient?.email?.let { email ->
-                    emails.add(email)
+                for (appt in appointments) {
+                    if (!appt.patientEmail.isNullOrBlank()) {
+                        emails.add(appt.patientEmail)
+                    } else {
+                        val patient = db.patientDao().getPatientById(appt.patientId)
+                        if (patient != null && !patient.email.isNullOrBlank()) {
+                            emails.add(patient.email)
+                        }
+                    }
                 }
+
+                if (emails.isNotEmpty()) {
+                    val message = absentMessageEditText.text.toString().ifBlank {
+                        "Bonjour, le docteur est momentanément absent. Merci de reprogrammer votre rendez-vous."
+                    }
+
+                    val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "message/rfc822"
+                        putExtra(Intent.EXTRA_EMAIL, emails.toTypedArray())
+                        putExtra(Intent.EXTRA_SUBJECT, "Indisponibilité du docteur")
+                        putExtra(Intent.EXTRA_TEXT, message)
+                    }
+
+                    try {
+                        startActivity(Intent.createChooser(emailIntent, "Envoyer un message à vos patients"))
+                    } catch (e: Exception) {
+                        Toast.makeText(this@SmartModesActivity, "Aucune application email trouvée", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email pour les rendez-vous à venir", Toast.LENGTH_SHORT).show()
+                }
+
+                startActivity(Intent(this@SmartModesActivity, AgendaActivity::class.java))
             }
-
-            if (emails.isNotEmpty()) {
-                val message = absentMessageEditText.text.toString().ifBlank {
-                    "Bonjour, le docteur est momentanément absent. Merci de reprogrammer votre rendez-vous."
-                }
-
-                val emailIntent = Intent(Intent.ACTION_SEND).apply {
-                    type = "message/rfc822"
-                    putExtra(Intent.EXTRA_EMAIL, emails.toTypedArray())
-                    putExtra(Intent.EXTRA_SUBJECT, "Indisponibilité du docteur")
-                    putExtra(Intent.EXTRA_TEXT, message)
-                }
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, "Envoyer un message à vos patients"))
-                } catch (e: Exception) {
-                    Toast.makeText(this@SmartModesActivity, "Aucune application email trouvée", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(this@SmartModesActivity, "Aucun patient avec email pour aujourd’hui", Toast.LENGTH_SHORT).show()
-            }
-
-            // 👉 Redirection vers Agenda
-            startActivity(Intent(this@SmartModesActivity, AgendaActivity::class.java))
         }
 
     }
 
     private fun updateCurrentMode() {
-        // Affiche le mode actuel
         currentModeText.text = "Mode actuel : $currentMode"
 
-        // Réinitialise tous les blocs à leur fond normal
         homeVisitLayout.setBackgroundResource(R.drawable.rounded_border)
         doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_border)
         absentLayout.setBackgroundResource(R.drawable.rounded_border)
 
-        // Applique la couleur verte arrondie uniquement au bloc actif
         when (currentMode) {
             "Visite à domicile" -> homeVisitLayout.setBackgroundResource(R.drawable.rounded_green_background)
             "Ne pas déranger" -> doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_green_background)
             "Absent" -> absentLayout.setBackgroundResource(R.drawable.rounded_green_background)
         }
     }
-
 }
