@@ -24,7 +24,7 @@ import com.example.projetmediassist.models.OrdonnanceMedicament
         Ordonnance::class,
         OrdonnanceMedicament::class
     ],
-    version = 13 
+    version = 14
 )
 abstract class AppDatabase : RoomDatabase() {
 
