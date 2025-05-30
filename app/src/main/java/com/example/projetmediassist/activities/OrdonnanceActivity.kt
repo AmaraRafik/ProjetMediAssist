@@ -1,6 +1,7 @@
 package com.example.projetmediassist.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -29,12 +30,18 @@ class OrdonnanceActivity : AppCompatActivity() {
     private lateinit var medicaments: MutableList<Medicament>
     private lateinit var globalAlertCard: androidx.cardview.widget.CardView
     private lateinit var globalAlertText: TextView
+
+    // Infos patient et docteur
     private var allergies: List<String> = emptyList()
     private var antecedents: List<String> = emptyList()
     private var diagnostic: String = ""
     private var patientName: String = ""
+    private var patientEmail: String = "" // NOUVEAU : pour stocker l'email du patient
     private var doctorName: String = ""
-    private var symptomes: String = "" // si tu l’utilises
+    private var symptomes: String = ""
+
+    // E-mail de la pharmacie défini en dur
+    private val PHARMACY_EMAIL = "pharmacie.test@example.com" // <-- REMPLACEZ PAR L'E-MAIL DE LA PHARMACIE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +51,6 @@ class OrdonnanceActivity : AppCompatActivity() {
         patientName = intent.getStringExtra("patient_name") ?: ""
         symptomes = intent.getStringExtra("symptomes") ?: ""
 
-        // Récupère le nom du docteur depuis les préférences de session
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorName = prefs.getString("doctorName", "") ?: ""
 
@@ -59,11 +65,17 @@ class OrdonnanceActivity : AppCompatActivity() {
         val addMedicamentBtn = findViewById<MaterialButton>(R.id.addMedicamentBtn)
         val saveOrdonnanceBtn = findViewById<MaterialButton>(R.id.saveOrdonnanceBtn)
 
+        // Récupérer le bouton "Envoyer au patient / pharmacie"
+        val envoyerBtn = findViewById<MaterialButton>(R.id.envoyerBtn) // Utilisez l'ID correct de votre XML
+
         val db = AppDatabase.getDatabase(this)
         lifecycleScope.launch {
             val patient = withContext(Dispatchers.IO) {
                 db.patientDao().getPatientByFullName(patientName)
             }
+
+            // Récupérer l'e-mail du patient
+            patientEmail = patient?.email ?: "" // Assurez-vous que votre modèle Patient a un champ 'email'
 
             allergies = patient?.allergies
                 ?.split(",")
@@ -98,6 +110,11 @@ class OrdonnanceActivity : AppCompatActivity() {
 
         saveOrdonnanceBtn.setOnClickListener {
             saveOrdonnanceInDatabase()
+        }
+
+        // Lier le bouton "Envoyer au patient / pharmacie" à la fonction d'envoi d'e-mail
+        envoyerBtn.setOnClickListener {
+            sendPrescriptionByEmail()
         }
     }
 
@@ -223,6 +240,70 @@ class OrdonnanceActivity : AppCompatActivity() {
             globalAlertText.text = messages.joinToString("\n\n")
         } else {
             globalAlertCard.visibility = android.view.View.GONE
+        }
+    }
+
+    private fun sendPrescriptionByEmail() {
+        // 1. Vérifier si l'e-mail du patient est disponible
+        if (patientEmail.isBlank()) {
+            Toast.makeText(this, "L'e-mail du patient est manquant. Impossible d'envoyer l'ordonnance.", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (medicaments.isEmpty()) {
+            Toast.makeText(this, "Veuillez ajouter au moins un médicament à l'ordonnance avant d'envoyer par e-mail.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 2. Construire le contenu de l'ordonnance textuel
+        val ordonnanceText = StringBuilder()
+        ordonnanceText.append("Ordonnance pour le patient : ${patientName}\n")
+        ordonnanceText.append("Diagnostic : ${diagnostic}\n")
+        ordonnanceText.append("Dr. : ${doctorName}\n")
+        ordonnanceText.append("\n--- Médicaments ---\n")
+        if (medicaments.isNotEmpty()) {
+            medicaments.forEachIndexed { index, medicament ->
+                ordonnanceText.append("${index + 1}. ${medicament.nom}")
+                if (!medicament.posologie.isNullOrBlank()) {
+                    ordonnanceText.append(" - Posologie: ${medicament.posologie}")
+                }
+                ordonnanceText.append("\n")
+            }
+        } else {
+            ordonnanceText.append("Aucun médicament prescrit.\n")
+        }
+        ordonnanceText.append("--------------------\n")
+        if (symptomes.isNotBlank()) {
+            ordonnanceText.append("Symptômes observés: ${symptomes}\n")
+        }
+
+        val emailSubject = "Votre Ordonnance Médicale - Dr. ${doctorName}"
+        val emailBody = "Bonjour ${patientName},\n\n" +
+                "Voici votre ordonnance émise par le Dr. ${doctorName}.\n\n" +
+                ordonnanceText.toString() +
+                "\n\nMerci de la présenter à votre pharmacien.\n\n" +
+                "Cordialement,\n" +
+                "Dr. ${doctorName}"
+
+        // 3. Préparer les destinataires
+        val recipients = mutableListOf<String>()
+        recipients.add(patientEmail) // Le patient
+        recipients.add(PHARMACY_EMAIL) // La pharmacie définie en dur
+
+        // 4. Créer l'Intent d'e-mail
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:") // Permet de s'assurer que seules les applications d'e-mail gèrent cela
+
+            putExtra(Intent.EXTRA_EMAIL, recipients.toTypedArray()) // Les destinataires
+            putExtra(Intent.EXTRA_SUBJECT, emailSubject)           // Le sujet
+            putExtra(Intent.EXTRA_TEXT, emailBody)                 // Le corps du texte
+        }
+
+        // 5. Lancer l'application d'e-mail
+        try {
+            startActivity(Intent.createChooser(intent, "Envoyer l'ordonnance via..."))
+        } catch (e: Exception) {
+            Toast.makeText(this, "Aucune application d'e-mail n'est installée ou configurée.", Toast.LENGTH_LONG).show()
+            e.printStackTrace()
         }
     }
 }

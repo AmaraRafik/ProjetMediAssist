@@ -4,5 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="medical_blue">#007BFF</color>
     <color name="mode_active_green">#8DCE8F</color> <!-- vert clair doux -->
-
+    <color name="gray">#CCCCCC</color>
 </resources>

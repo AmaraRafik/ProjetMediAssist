@@ -37,7 +37,7 @@
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bienvenue Dr."
+            android:text="Bienvenue"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/black" />

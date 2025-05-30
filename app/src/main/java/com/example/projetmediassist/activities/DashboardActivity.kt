@@ -17,18 +17,24 @@ import java.util.*
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var doctorEmail: String
+    private lateinit var doctorName: String // Declare doctorName here
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // Afficher le nom du médecin
-        val doctorName = intent.getStringExtra("doctorName") ?: "Docteur"
-        findViewById<TextView>(R.id.doctorNameText).text = doctorName
-
-        // Charger l'email depuis la session
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
-        doctorEmail = prefs.getString("doctorEmail", null) ?: return
+        doctorEmail = prefs.getString("doctorEmail", null) ?: run {
+            // Handle case where doctorEmail is not found, e.g., redirect to login
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        // Retrieve doctorName from SharedPreferences
+        doctorName = prefs.getString("doctorName", "Docteur") ?: "Docteur" // Get doctor's name from prefs
+
+        // Afficher le nom du médecin
+        findViewById<TextView>(R.id.doctorNameText).text = "Dr. $doctorName" // Use the retrieved doctorName
 
         // Charger le prochain RDV
         loadNextAppointment()
@@ -55,6 +61,10 @@ class DashboardActivity : AppCompatActivity() {
         super.onResume()
         // 🔵 Recharge le prochain RDV dès qu’on revient sur le dashboard !
         loadNextAppointment()
+        // Also update doctor name in case it was changed in settings (though your settings doesn't allow it currently)
+        val prefs = getSharedPreferences("session", MODE_PRIVATE)
+        doctorName = prefs.getString("doctorName", "Docteur") ?: "Docteur"
+        findViewById<TextView>(R.id.doctorNameText).text = "Dr. $doctorName"
     }
 
     private fun loadNextAppointment() {

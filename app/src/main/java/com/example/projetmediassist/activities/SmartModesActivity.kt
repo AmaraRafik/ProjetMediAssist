@@ -26,7 +26,7 @@ class SmartModesActivity : AppCompatActivity() {
     private lateinit var configureSlotsButton: Button
 
     private lateinit var doctorEmail: String
-    private var currentMode: String = "En consultation"
+    private var currentMode: String = "En consultation" // Initialize with a default
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,17 +57,31 @@ class SmartModesActivity : AppCompatActivity() {
 
         // Gestion Visite à domicile
         homeVisitLayout.setOnClickListener {
-            currentMode = "Visite à domicile"
+            // Toggle logic for "Visite à domicile"
+            if (currentMode == "Visite à domicile") {
+                currentMode = "En consultation" // Deactivate home visit
+            } else {
+                currentMode = "Visite à domicile" // Activate home visit
+                // If HomeVisitActivity needs to be launched every time it's *activated*,
+                // you can keep this line here. If it's just for initial setup, move it.
+                startActivity(Intent(this, HomeVisitActivity::class.java))
+            }
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
-            startActivity(Intent(this, HomeVisitActivity::class.java))
+            Toast.makeText(this, "Mode: $currentMode", Toast.LENGTH_SHORT).show()
         }
 
+
         // Gestion Ne pas déranger
-        doNotDisturbSwitch.isChecked = SettingsUtils.isDoNotDisturbEnabled(this)
+        // Ensure the switch state matches the current mode on load
+        doNotDisturbSwitch.isChecked = (currentMode == "Ne pas déranger")
         doNotDisturbSwitch.setOnCheckedChangeListener { _, isChecked ->
-            SettingsUtils.setDoNotDisturb(this, isChecked)
-            currentMode = if (isChecked) "Ne pas déranger" else "En consultation"
+            if (isChecked) {
+                currentMode = "Ne pas déranger"
+            } else {
+                currentMode = "En consultation" // Default mode when DND is off
+            }
+            SettingsUtils.setDoNotDisturb(this, isChecked) // Keep this for DND specific setting
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
 
@@ -95,10 +109,7 @@ class SmartModesActivity : AppCompatActivity() {
 
         // Gestion absence
         configureSlotsButton.setOnClickListener {
-            currentMode = "Absent"
-            SettingsUtils.setCurrentMode(this, currentMode)
-            updateCurrentMode()
-
+            // Only set mode to Absent if dates are valid and action is taken
             val startStr = startDateEditText.text.toString()
             val endStr = endDateEditText.text.toString()
 
@@ -114,6 +125,11 @@ class SmartModesActivity : AppCompatActivity() {
                 Toast.makeText(this, "La date de fin doit être après la date de début.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            currentMode = "Absent" // Set mode to Absent only when action is initiated
+            SettingsUtils.setCurrentMode(this, currentMode)
+            updateCurrentMode()
+
 
             val db = AppDatabase.getDatabase(this)
 
@@ -143,7 +159,7 @@ class SmartModesActivity : AppCompatActivity() {
                         Toast.makeText(this@SmartModesActivity, "Aucune application email trouvée", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email à contacter", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email à contacter ou aucun rendez-vous à supprimer pour cette période.", Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -153,14 +169,25 @@ class SmartModesActivity : AppCompatActivity() {
     private fun updateCurrentMode() {
         currentModeText.text = getString(R.string.current_mode_format, currentMode)
 
+        // Reset all backgrounds to default (white border) first
         homeVisitLayout.setBackgroundResource(R.drawable.rounded_border)
         doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_border)
         absentLayout.setBackgroundResource(R.drawable.rounded_border)
 
+        // Then apply green background to the active mode
         when (currentMode) {
             "Visite à domicile" -> homeVisitLayout.setBackgroundResource(R.drawable.rounded_green_background)
             "Ne pas déranger" -> doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_green_background)
             "Absent" -> absentLayout.setBackgroundResource(R.drawable.rounded_green_background)
+        }
+
+        // Make sure the Do Not Disturb switch state reflects the current mode
+        // Only set the switch state if the current mode is explicitly "Ne pas déranger"
+        // or if it's "En consultation" AND doNotDisturb was previously enabled (which means it's now off)
+        if (currentMode == "Ne pas déranger") {
+            doNotDisturbSwitch.isChecked = true
+        } else {
+            doNotDisturbSwitch.isChecked = false
         }
     }
 }
