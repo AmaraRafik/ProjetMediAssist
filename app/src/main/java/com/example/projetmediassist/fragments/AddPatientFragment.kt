@@ -13,7 +13,6 @@ import com.example.projetmediassist.databinding.FragmentAddPatientBinding
 import com.example.projetmediassist.models.Patient
 import kotlinx.coroutines.launch
 
-// Interface de rappel pour informer l’activité hôte
 interface OnPatientAddedListener {
     fun onPatientAdded()
 }
@@ -23,15 +22,15 @@ class AddPatientFragment : DialogFragment() {
     private var _binding: FragmentAddPatientBinding? = null
     private val binding get() = _binding!!
 
-    // Le callback que l’activité peut définir
     var listener: OnPatientAddedListener? = null
 
     companion object {
         fun newInstance(fullName: String?, email: String? = null): AddPatientFragment {
             val fragment = AddPatientFragment()
-            val args = Bundle()
-            args.putString("full_name", fullName)
-            args.putString("email", email)
+            val args = Bundle().apply {
+                putString("full_name", fullName)
+                putString("email", email)
+            }
             fragment.arguments = args
             return fragment
         }
@@ -54,14 +53,9 @@ class AddPatientFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.getString("full_name")?.let {
-            binding.fullNameEditText.setText(it)
-        }
-        arguments?.getString("email")?.let {
-            binding.emailEditText.setText(it)
-        }
-
-        // Pour d'autres champs à l'avenir, faire de même avec d'autres clés (phone, email...)
+        // Pré-remplissage des champs
+        binding.fullNameEditText.setText(arguments?.getString("full_name") ?: "")
+        binding.emailEditText.setText(arguments?.getString("email") ?: "")
 
         val prefs = requireActivity().getSharedPreferences("session", 0)
         val doctorEmail = prefs.getString("doctorEmail", null)
@@ -96,19 +90,11 @@ class AddPatientFragment : DialogFragment() {
 
             lifecycleScope.launch {
                 db.patientDao().insert(newPatient)
-                dismiss() // ferme le fragment
-
-                // Callback vers l’activité
-                listener?.onPatientAdded()
-
                 Toast.makeText(requireContext(), "Patient ajouté !", Toast.LENGTH_SHORT).show()
+                listener?.onPatientAdded()
+                dismiss()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onStart() {
@@ -117,5 +103,10 @@ class AddPatientFragment : DialogFragment() {
             (resources.displayMetrics.widthPixels * 0.90).toInt(),
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

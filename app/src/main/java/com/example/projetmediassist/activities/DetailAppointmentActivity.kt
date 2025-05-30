@@ -10,6 +10,7 @@ import com.example.projetmediassist.R
 import com.example.projetmediassist.database.AppDatabase
 import kotlinx.coroutines.*
 import com.google.android.material.button.MaterialButton
+import com.example.projetmediassist.fragments.AddPatientFragment
 
 class DetailAppointmentActivity : AppCompatActivity() {
 
@@ -29,7 +30,6 @@ class DetailAppointmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_appointment)
 
-        // UI elements
         patientNameText = findViewById(R.id.patientNameText)
         dateHourText = findViewById(R.id.dateHourText)
         visitTypeText = findViewById(R.id.visitTypeText)
@@ -37,10 +37,8 @@ class DetailAppointmentActivity : AppCompatActivity() {
         viewPatientBtn = findViewById(R.id.viewPatientBtn)
         startConsultationBtn = findViewById(R.id.startConsultationBtn)
 
-        // DB
         db = AppDatabase.getDatabase(this)
 
-        // Get appointment ID
         appointmentId = intent.getIntExtra("APPOINTMENT_ID", -1)
         if (appointmentId == -1) {
             Toast.makeText(this, "Erreur : RDV introuvable", Toast.LENGTH_LONG).show()
@@ -48,7 +46,6 @@ class DetailAppointmentActivity : AppCompatActivity() {
             return
         }
 
-        // Load data
         scope.launch {
             loadData()
         }
@@ -56,7 +53,6 @@ class DetailAppointmentActivity : AppCompatActivity() {
 
     private suspend fun loadData() {
         withContext(Dispatchers.IO) {
-            // Récupère le RDV directement par ID
             val appointment = db.appointmentDao().getAppointmentById(appointmentId)
                 ?: return@withContext runOnUiThread {
                     Toast.makeText(this@DetailAppointmentActivity, "Rendez-vous non trouvé", Toast.LENGTH_LONG).show()
@@ -66,11 +62,9 @@ class DetailAppointmentActivity : AppCompatActivity() {
             val patient = db.patientDao().getPatientByFullName(appointment.patient)
 
             runOnUiThread {
-                // Infos patient
                 patientNameText.text = appointment.patient
                 dateHourText.text = "${formatDate(appointment.date)} à ${appointment.hour}"
 
-                // Visite à domicile/cabinet
                 if (appointment.description.contains("domicile", ignoreCase = true)) {
                     visitTypeText.text = "Visite à domicile"
                     addressText.text = patient?.address ?: "(Adresse inconnue)"
@@ -86,6 +80,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
                         val patient = withContext(Dispatchers.IO) {
                             db.patientDao().getPatientByFullName(patientNameText.text.toString())
                         }
+
                         if (patient != null) {
                             val intent = Intent(this@DetailAppointmentActivity, PatientDetailActivity::class.java)
                             intent.putExtra("patient_id", patient.id)
@@ -97,26 +92,25 @@ class DetailAppointmentActivity : AppCompatActivity() {
                                     "Patient non trouvé, veuillez l'ajouter.",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                // <-- MODIFIE ICI
-                                val fragment = com.example.projetmediassist.fragments.AddPatientFragment
-                                    .newInstance(patientNameText.text.toString())
+
+                                val fragment = AddPatientFragment.newInstance(
+                                    fullName = appointment.patient,
+                                    email = appointment.patientEmail
+                                )
                                 fragment.show(supportFragmentManager, "AddPatientFragment")
                             }
                         }
                     }
                 }
 
-
                 startConsultationBtn.setOnClickListener {
                     val intent = Intent(this@DetailAppointmentActivity, ConsultationActivity::class.java)
                     intent.putExtra("patient_name", patientNameText.text.toString())
                     startActivity(intent)
                 }
-
             }
         }
     }
-
 
     private fun formatDate(timestamp: Long): String {
         val sdf = java.text.SimpleDateFormat("EEEE d MMMM yyyy", java.util.Locale("fr"))

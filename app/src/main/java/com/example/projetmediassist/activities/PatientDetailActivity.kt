@@ -53,6 +53,7 @@ class PatientDetailActivity : AppCompatActivity() {
             // On passe le nom du patient à AgendaActivity
             val intent = Intent(this, AgendaActivity::class.java)
             intent.putExtra("prefill_patient_name", patientName)
+            intent.putExtra("prefill_patient_email", binding.emailText.text.toString())
             startActivity(intent)
         }
 

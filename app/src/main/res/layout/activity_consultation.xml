@@ -10,14 +10,22 @@
     app:ignore="NamespaceTypo">
 
     <!-- Titre -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Consultation"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:layout_marginBottom="32dp"
-        android:textColor="@android:color/black" />
+        android:background="@drawable/bandeau_arrondi"
+        android:padding="12dp"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consultation"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
     <!-- CardView pour nom du patient + micro -->
     <androidx.cardview.widget.CardView

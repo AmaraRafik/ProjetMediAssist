@@ -11,15 +11,26 @@
         android:layout_height="wrap_content">
 
         <!-- Titre -->
-        <TextView
-            android:id="@+id/smartModesTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Modes intelligents"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="20dp" />
+            android:background="@drawable/bandeau_arrondi"
+            android:padding="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/smartModesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modes intelligents"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
 
         <!-- Mode actuel -->
         <TextView
@@ -77,12 +88,20 @@
                 android:layout_marginEnd="20dp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Ne pas déranger"
                 android:textSize="17sp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/doNotDisturbSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="@color/medical_blue"
+                android:trackTint="@color/medical_blue" />
         </LinearLayout>
 
         <!-- Absent -->
@@ -117,6 +136,32 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Début de l'absence -->
+            <EditText
+                android:id="@+id/absenceStartEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Début de l'absence (ex: 01/06/2025)"
+                android:focusable="false"
+                android:background="@drawable/edittext_background"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="15sp" />
+
+            <!-- Fin de l'absence -->
+            <EditText
+                android:id="@+id/absenceEndEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fin de l'absence (ex: 03/06/2025)"
+                android:focusable="false"
+                android:background="@drawable/edittext_background"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="15sp" />
+
             <!-- Message personnalisé -->
             <EditText
                 android:id="@+id/absentMessageEditText"
@@ -127,7 +172,7 @@
                 android:textColor="@android:color/black"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <!-- Bouton Configurer créneaux -->
             <Button
@@ -139,7 +184,7 @@
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/medical_blue"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp" />
         </LinearLayout>
 
     </LinearLayout>

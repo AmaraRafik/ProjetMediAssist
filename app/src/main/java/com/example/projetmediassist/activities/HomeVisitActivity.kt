@@ -1,5 +1,6 @@
 package com.example.projetmediassist.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,7 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var doctorEmail: String? = null
 
-    // Ta vraie clé API Google
+    // Clé API Google
     private val GOOGLE_MAPS_API_KEY = "AIzaSyAS0wiGoU7bzeZ8oFpYjPjnCqLYfJjZgY8"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,10 +74,9 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
 
         lifecycleScope.launch {
             val patients = patientDao.getPatientsForDoctor(email)
-
             val appointments = appointmentDao.getAppointmentsForDoctor(email)
-
             val now = System.currentTimeMillis()
+
             val visitesDomicile = appointments
                 .filter {
                     it.description.contains("domicile", ignoreCase = true) &&
@@ -93,19 +93,17 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
                         address = patient.address,
                         appointmentId = rdv.id
                     )
-                } else {
-                    null
-                }
+                } else null
             }
 
             withContext(Dispatchers.Main) {
                 adapter = HomeVisitAdapter(homeVisitItems) { item ->
-                    Toast.makeText(this@HomeVisitActivity, "Voir détail pour ${item.patientName}", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@HomeVisitActivity, DetailAppointmentActivity::class.java)
+                    intent.putExtra("APPOINTMENT_ID", item.appointmentId)
+                    startActivity(intent)
                 }
                 recyclerView.adapter = adapter
-            }
 
-            withContext(Dispatchers.Main) {
                 afficherMarqueursWeb(homeVisitItems)
             }
         }
@@ -136,7 +134,6 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    // Fonction qui géocode une adresse via l'API Web Google
     private suspend fun geoCodeAddressWeb(address: String): LatLng? = withContext(Dispatchers.IO) {
         try {
             val url = "https://maps.googleapis.com/maps/api/geocode/json?address=${address.replace(" ", "+")}&key=$GOOGLE_MAPS_API_KEY"
@@ -147,18 +144,16 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
             val body = response.body?.string() ?: return@withContext null
             val jsonObject = JSONObject(body)
             val results = jsonObject.getJSONArray("results")
-            if (results.length() == 0) {
-                return@withContext null
-            } else {
-                val location = results.getJSONObject(0)
-                    .getJSONObject("geometry")
-                    .getJSONObject("location")
-                val lat = location.getDouble("lat")
-                val lng = location.getDouble("lng")
-                return@withContext LatLng(lat, lng)
-            }
+            if (results.length() == 0) return@withContext null
+
+            val location = results.getJSONObject(0)
+                .getJSONObject("geometry")
+                .getJSONObject("location")
+            val lat = location.getDouble("lat")
+            val lng = location.getDouble("lng")
+            LatLng(lat, lng)
         } catch (e: Exception) {
-            return@withContext null
+            null
         }
     }
 }

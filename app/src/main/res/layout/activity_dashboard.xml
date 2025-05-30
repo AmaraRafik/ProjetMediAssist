@@ -11,16 +11,36 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- Titre Accueil -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bandeau_arrondi"
+            android:padding="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="28dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/homeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accueil"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
         <!-- Bienvenue -->
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bienvenue"
+            android:text="Bienvenue Dr."
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/black" />
-
 
         <TextView
             android:id="@+id/doctorNameText"

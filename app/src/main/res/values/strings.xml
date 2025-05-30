@@ -2,4 +2,9 @@
     <string name="app_name">ProjetMediAssist</string>
     <string name="aucun_diagnostic">Aucun diagnostic détecté</string>
 
+    <string name="error_not_logged_in">Erreur : médecin non connecté</string>
+    <string name="mode_dnd_on">🔕 Mode Ne pas déranger activé</string>
+    <string name="mode_dnd_off">🔔 Notifications réactivées</string>
+    <string name="current_mode_format">Mode actuel : %1$s</string>
+
 </resources>

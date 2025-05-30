@@ -36,6 +36,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -44,7 +45,10 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+
+
+    implementation("com.google.android.material:material:1.11.0")
+
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
@@ -55,9 +59,10 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation(libs.play.services.maps)
+    implementation(libs.androidx.cardview)
     kapt("androidx.room:room-compiler:2.6.1")
 
+    implementation(libs.play.services.maps)
 
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
@@ -66,7 +71,7 @@ dependencies {
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.1")
 
-    // Optionnel : Coroutines
+    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // OkHttp pour requêtes HTTP

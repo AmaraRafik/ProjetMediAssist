@@ -1,29 +1,33 @@
 package com.example.projetmediassist.activities
 
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import com.example.projetmediassist.R
+import android.app.DatePickerDialog
 import android.content.Intent
-import com.example.projetmediassist.utils.SettingsUtils
-import android.widget.Toast
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.projetmediassist.R
 import com.example.projetmediassist.database.AppDatabase
+import com.example.projetmediassist.utils.SettingsUtils
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SmartModesActivity : AppCompatActivity() {
+
     private lateinit var currentModeText: TextView
     private lateinit var homeVisitLayout: LinearLayout
     private lateinit var doNotDisturbLayout: LinearLayout
+    private lateinit var doNotDisturbSwitch: Switch
     private lateinit var absentLayout: LinearLayout
     private lateinit var absentMessageEditText: EditText
+    private lateinit var startDateEditText: EditText
+    private lateinit var endDateEditText: EditText
     private lateinit var configureSlotsButton: Button
-    private lateinit var doctorEmail: String
 
+    private lateinit var doctorEmail: String
     private var currentMode: String = "En consultation"
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,104 +35,123 @@ class SmartModesActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = prefs.getString("doctorEmail", null) ?: run {
-            Toast.makeText(this, "Erreur : médecin non connecté", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_not_logged_in), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
+        // Récupération des vues
         currentModeText = findViewById(R.id.currentModeText)
         homeVisitLayout = findViewById(R.id.homeVisitLayout)
         doNotDisturbLayout = findViewById(R.id.doNotDisturbLayout)
+        doNotDisturbSwitch = findViewById(R.id.doNotDisturbSwitch)
         absentLayout = findViewById(R.id.absentLayout)
         absentMessageEditText = findViewById(R.id.absentMessageEditText)
+        startDateEditText = findViewById(R.id.absenceStartEditText)
+        endDateEditText = findViewById(R.id.absenceEndEditText)
         configureSlotsButton = findViewById(R.id.configureSlotsButton)
 
-        // Récupère le dernier mode utilisé
+        // Appliquer mode courant
         currentMode = SettingsUtils.getCurrentMode(this)
         updateCurrentMode()
 
-        // Gestion des clics
+        // Gestion Visite à domicile
         homeVisitLayout.setOnClickListener {
             currentMode = "Visite à domicile"
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
-            val intent = Intent(this, HomeVisitActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HomeVisitActivity::class.java))
         }
 
-        doNotDisturbLayout.setOnClickListener {
-            val isEnabled = SettingsUtils.isDoNotDisturbEnabled(this)
-            val newState = !isEnabled
-            SettingsUtils.setDoNotDisturb(this, newState)
-
-            currentMode = if (newState) "Ne pas déranger" else "En consultation"
+        // Gestion Ne pas déranger
+        doNotDisturbSwitch.isChecked = SettingsUtils.isDoNotDisturbEnabled(this)
+        doNotDisturbSwitch.setOnCheckedChangeListener { _, isChecked ->
+            SettingsUtils.setDoNotDisturb(this, isChecked)
+            currentMode = if (isChecked) "Ne pas déranger" else "En consultation"
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
 
-            val message = if (newState) "🔕 Mode Ne pas déranger activé" else "🔔 Notifications réactivées"
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            val msgRes = if (isChecked) R.string.mode_dnd_on else R.string.mode_dnd_off
+            Toast.makeText(this, getString(msgRes), Toast.LENGTH_SHORT).show()
         }
 
-        absentLayout.setOnClickListener {
-            if (currentMode == "Absent") {
-                currentMode = "En consultation"
-                SettingsUtils.setCurrentMode(this, currentMode)
-                updateCurrentMode()
-            }
+        // Sélection de dates d’absence
+        val openDatePicker = { editText: EditText ->
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    calendar.set(year, month, dayOfMonth)
+                    editText.setText(dateFormat.format(calendar.time))
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
+        startDateEditText.setOnClickListener { openDatePicker(startDateEditText) }
+        endDateEditText.setOnClickListener { openDatePicker(endDateEditText) }
+
+        // Gestion absence
         configureSlotsButton.setOnClickListener {
             currentMode = "Absent"
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
 
+            val startStr = startDateEditText.text.toString()
+            val endStr = endDateEditText.text.toString()
+
+            if (startStr.isBlank() || endStr.isBlank()) {
+                Toast.makeText(this, "Veuillez spécifier les dates de début et de fin.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val startMillis = dateFormat.parse(startStr)?.time ?: 0
+            val endMillis = dateFormat.parse(endStr)?.time ?: 0
+
+            if (startMillis >= endMillis) {
+                Toast.makeText(this, "La date de fin doit être après la date de début.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val db = AppDatabase.getDatabase(this)
-            val nowMillis = System.currentTimeMillis()
 
             lifecycleScope.launch {
-                val appointments = db.appointmentDao().getUpcomingAppointments(doctorEmail, nowMillis)
-                val emails = mutableSetOf<String>() // ✅ utiliser Set pour éviter les doublons
+                val toDelete = db.appointmentDao().getAppointmentsForDoctor(doctorEmail)
+                    .filter { it.timeInMillis in startMillis..endMillis }
 
-                for (appt in appointments) {
-                    if (!appt.patientEmail.isNullOrBlank()) {
-                        emails.add(appt.patientEmail)
-                    } else {
-                        val patient = db.patientDao().getPatientById(appt.patientId)
-                        if (patient != null && !patient.email.isNullOrBlank()) {
-                            emails.add(patient.email)
-                        }
-                    }
-                }
+                toDelete.forEach { db.appointmentDao().delete(it) }
+
+                val emails = toDelete.mapNotNull { it.patientEmail?.takeIf { mail -> mail.isNotBlank() } }.toSet()
 
                 if (emails.isNotEmpty()) {
-                    val message = absentMessageEditText.text.toString().ifBlank {
-                        "Bonjour, le docteur est momentanément absent. Merci de reprogrammer votre rendez-vous."
+                    val msg = absentMessageEditText.text.toString().ifBlank {
+                        "Bonjour, le docteur sera absent du $startStr au $endStr. Merci de reprogrammer votre rendez-vous."
                     }
 
-                    val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "message/rfc822"
                         putExtra(Intent.EXTRA_EMAIL, emails.toTypedArray())
                         putExtra(Intent.EXTRA_SUBJECT, "Indisponibilité du docteur")
-                        putExtra(Intent.EXTRA_TEXT, message)
+                        putExtra(Intent.EXTRA_TEXT, msg)
                     }
 
                     try {
-                        startActivity(Intent.createChooser(emailIntent, "Envoyer un message à vos patients"))
+                        startActivity(Intent.createChooser(intent, "Envoyer un message"))
                     } catch (e: Exception) {
                         Toast.makeText(this@SmartModesActivity, "Aucune application email trouvée", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email pour les rendez-vous à venir", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email à contacter", Toast.LENGTH_SHORT).show()
                 }
 
-                startActivity(Intent(this@SmartModesActivity, AgendaActivity::class.java))
             }
         }
-
     }
 
     private fun updateCurrentMode() {
-        currentModeText.text = "Mode actuel : $currentMode"
+        currentModeText.text = getString(R.string.current_mode_format, currentMode)
 
         homeVisitLayout.setBackgroundResource(R.drawable.rounded_border)
         doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_border)

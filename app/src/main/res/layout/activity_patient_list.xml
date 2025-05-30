@@ -11,22 +11,49 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/patientListTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mes patients"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:layout_marginBottom="28sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/searchEditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Rechercher"
-            android:drawableStart="@android:drawable/ic_menu_search"
-            android:layout_marginBottom="12dp"/>
+            android:background="@drawable/bandeau_arrondi"
+            android:padding="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="28dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/patientListTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mes patients"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            app:boxStrokeColor="#CCCCCC"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rechercher un patient"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patientRecyclerView"

@@ -15,16 +15,26 @@
         android:layout_weight="1">
 
         <!-- Titre -->
-        <TextView
-            android:id="@+id/ordonnanceTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ordonnance"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="@color/medical_blue"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"/>
+            android:background="@drawable/bandeau_arrondi"
+            android:padding="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/ordonnanceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ordonnance"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
 
         <!-- Patient -->
         <TextView

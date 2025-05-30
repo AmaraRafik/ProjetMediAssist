@@ -19,8 +19,8 @@ import com.example.projetmediassist.R
 import com.example.projetmediassist.adapters.AppointmentAdapter
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.fragments.AddAppointmentFragment
+import com.example.projetmediassist.fragments.AddPatientFragment
 import com.example.projetmediassist.fragments.OnAppointmentAddedListener
-import com.example.projetmediassist.models.Appointment
 import com.example.projetmediassist.utils.NotificationUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,15 +38,15 @@ class AgendaActivity : AppCompatActivity() {
     private lateinit var doctorEmail: String
     private var weekOffset = 0
 
-    // Ajout : stocker le nom du patient à pré-remplir (si fourni)
     private var prefillPatientName: String? = null
+    private var prefillPatientEmail: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agenda)
 
-        // Récupérer l’éventuel nom à pré-remplir
         prefillPatientName = intent.getStringExtra("prefill_patient_name")
+        prefillPatientEmail = intent.getStringExtra("prefill_patient_email")
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = prefs.getString("doctorEmail", null) ?: run {
@@ -61,33 +61,34 @@ class AgendaActivity : AppCompatActivity() {
         findViewById<Button>(R.id.prevWeekButton).setOnClickListener {
             weekOffset--
             renderWeek(weekOffset)
+            selectedDayView?.performClick()
         }
 
         findViewById<Button>(R.id.nextWeekButton).setOnClickListener {
             weekOffset++
             renderWeek(weekOffset)
+            selectedDayView?.performClick()
         }
 
         renderWeek(weekOffset)
 
-        val addButton = findViewById<Button>(R.id.addAppointmentButton)
-        addButton.setOnClickListener {
+        selectedDayView?.performClick()
+
+        findViewById<Button>(R.id.addAppointmentButton).setOnClickListener {
             val selected = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
             selected.set(Calendar.HOUR_OF_DAY, 0)
             selected.set(Calendar.MINUTE, 0)
             selected.set(Calendar.SECOND, 0)
             selected.set(Calendar.MILLISECOND, 0)
 
-            // Utiliser le fragment avec pré-remplissage si besoin
             val fragment = AddAppointmentFragment()
             fragment.selectedDate = selected.timeInMillis
 
-            // Ajout du pré-remplissage du patient
-            if (!prefillPatientName.isNullOrBlank()) {
-                val args = Bundle()
-                args.putString("prefill_patient_name", prefillPatientName)
-                fragment.arguments = args
+            val args = Bundle().apply {
+                prefillPatientName?.let { putString("prefill_patient_name", it) }
+                prefillPatientEmail?.let { putString("prefill_patient_email", it) }
             }
+            fragment.arguments = args
 
             fragment.listener = object : OnAppointmentAddedListener {
                 override fun onAppointmentAdded() {
@@ -113,21 +114,18 @@ class AgendaActivity : AppCompatActivity() {
         val rangeFormat = SimpleDateFormat("dd MMM", Locale("fr"))
         val monthFormat = SimpleDateFormat("MMMM yyyy", Locale("fr"))
 
-        val calendar = Calendar.getInstance()
-        calendar.firstDayOfWeek = Calendar.MONDAY
-        calendar.add(Calendar.WEEK_OF_YEAR, offset)
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val calendar = Calendar.getInstance().apply {
+            firstDayOfWeek = Calendar.MONDAY
+            add(Calendar.WEEK_OF_YEAR, offset)
+            set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        }
 
-        val startDate = calendar.clone() as Calendar
-
-        val startText = rangeFormat.format(startDate.time)
-
-        // NEW: date du jour "normalisée" (sans l'heure)
-        val today = Calendar.getInstance()
-        today.set(Calendar.HOUR_OF_DAY, 0)
-        today.set(Calendar.MINUTE, 0)
-        today.set(Calendar.SECOND, 0)
-        today.set(Calendar.MILLISECOND, 0)
+        val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
 
         var todayWasSelected = false
 
@@ -147,10 +145,8 @@ class AgendaActivity : AppCompatActivity() {
                 typeface = Typeface.DEFAULT_BOLD
                 tag = clone
 
-                // *** Changement ici : sélectionne aujourd'hui par défaut ***
-                val isToday =
-                    clone.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
-                            clone.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
+                val isToday = clone.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
+                        clone.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
 
                 if (isToday && !todayWasSelected) {
                     selectedDayView = this
@@ -158,8 +154,8 @@ class AgendaActivity : AppCompatActivity() {
                     setBackgroundResource(R.drawable.selected_day_background)
                     setTextColor(Color.WHITE)
                     dateLabel.text = labelFormat.format(clone.time).replaceFirstChar { it.uppercase() }
-                    loadAppointments(clone.timeInMillis)
                     todayWasSelected = true
+                    loadAppointments(clone.timeInMillis)
                 }
 
                 setOnClickListener {
@@ -177,7 +173,6 @@ class AgendaActivity : AppCompatActivity() {
                         set(Calendar.MILLISECOND, 0)
                     }
                     selectedDate = normalized
-
                     dateLabel.text = labelFormat.format(normalized.time).replaceFirstChar { it.uppercase() }
                     loadAppointments(normalized.timeInMillis)
                 }
@@ -187,11 +182,17 @@ class AgendaActivity : AppCompatActivity() {
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
+        if (!todayWasSelected && dayStrip.childCount > 0) {
+            val firstDay = dayStrip.getChildAt(0) as TextView
+            firstDay.performClick()
+        }
+
         val endText = rangeFormat.format(calendar.time)
-        weekText.text = "$startText - $endText"
+        weekText.text = "${
+            rangeFormat.format((calendar.clone() as Calendar).apply { add(Calendar.DAY_OF_MONTH, -7) }.time)
+        } - $endText"
         monthText.text = monthFormat.format(calendar.time)
     }
-
 
     private fun loadAppointments(date: Long) {
         lifecycleScope.launch {
@@ -206,14 +207,11 @@ class AgendaActivity : AppCompatActivity() {
                             .setMessage("Voulez-vous vraiment supprimer ce rendez-vous ?")
                             .setPositiveButton("Oui") { _, _ ->
                                 lifecycleScope.launch {
-                                    // 🧼 Annule les notifications prévues
                                     NotificationUtils.cancelAppointmentNotifications(
                                         context = this@AgendaActivity,
                                         appointmentTime = appointmentToDelete.timeInMillis
                                     )
-
                                     db.appointmentDao().delete(appointmentToDelete)
-
                                     withContext(Dispatchers.Main) {
                                         loadAppointments(date)
                                         Toast.makeText(
@@ -239,16 +237,8 @@ class AgendaActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
-
-        val today = selectedDate?.clone() as? Calendar ?: Calendar.getInstance()
-        today.set(Calendar.HOUR_OF_DAY, 0)
-        today.set(Calendar.MINUTE, 0)
-        today.set(Calendar.SECOND, 0)
-        today.set(Calendar.MILLISECOND, 0)
-
-        loadAppointments(today.timeInMillis)
+        selectedDate?.timeInMillis?.let { loadAppointments(it) }
     }
 }

@@ -36,4 +36,7 @@ interface AppointmentDao {
     @Query("SELECT * FROM appointments WHERE doctorEmail = :email AND timeInMillis >= :now ORDER BY timeInMillis ASC")
     suspend fun getUpcomingAppointments(email: String, now: Long): List<Appointment>
 
+    @Query("DELETE FROM appointments WHERE doctorEmail = :email AND timeInMillis BETWEEN :start AND :end")
+    suspend fun deleteAppointmentsInRange(email: String, start: Long, end: Long)
+
 }
