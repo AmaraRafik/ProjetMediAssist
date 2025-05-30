@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ProjetMediAssist</string>
     <string name="aucun_diagnostic">Aucun diagnostic détecté</string>
+    <string name="default_web_client_id">830240377191-fokrebtt64c6k5r88vh0cip2903a5dvj.apps.googleusercontent.com</string>
 
     <string name="error_not_logged_in">Erreur : médecin non connecté</string>
     <string name="mode_dnd_on">🔕 Mode Ne pas déranger activé</string>

@@ -5,14 +5,30 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.projetmediassist.R
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.databinding.ActivityLoginBinding
+import com.example.projetmediassist.fragments.EnterRppsDialogFragment
+import com.example.projetmediassist.models.Doctor
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var firebaseAuth: FirebaseAuth
+    private val RC_SIGN_IN = 9001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +36,20 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val db = AppDatabase.getDatabase(this)
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
+            // 🔑 DEMANDE LE SCOPE CALENDAR
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        binding.googleSignInButton.setOnClickListener {
+            startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
+        }
 
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
@@ -30,35 +60,85 @@ class LoginActivity : AppCompatActivity() {
                     val doctor = db.doctorDao().getDoctorByEmail(email)
                     withContext(Dispatchers.Main) {
                         when {
-                            doctor == null -> {
-                                Toast.makeText(this@LoginActivity, "Email non trouvé", Toast.LENGTH_SHORT).show()
-                            }
-                            doctor.password != password -> {
-                                Toast.makeText(this@LoginActivity, "Mot de passe incorrect", Toast.LENGTH_SHORT).show()
-                            }
-                            else -> {
-                                // ✅ Enregistrement de l'email du médecin dans SharedPreferences
-                                val prefs = getSharedPreferences("session", MODE_PRIVATE)
-                                prefs.edit()
-                                    .putString("doctorEmail", doctor.email)
-                                    .putString("doctorName", doctor.fullName) // AJOUTÉ !
-                                    .apply()
-
-                                val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
-                                intent.putExtra("doctorName", doctor.fullName)
-                                startActivity(intent)
-                                finish()
-                            }
+                            doctor == null -> showToast("Email non trouvé")
+                            doctor.password != password -> showToast("Mot de passe incorrect")
+                            else -> saveSessionAndGoToDashboard(doctor.fullName, doctor.email)
                         }
                     }
                 }
             } else {
-                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
+                showToast("Veuillez remplir tous les champs")
             }
         }
 
         binding.createAccountText.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account)
+            } catch (e: ApiException) {
+                showToast("Échec de connexion Google: ${e.message}")
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
+        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = firebaseAuth.currentUser
+                    val email = user?.email ?: return@addOnCompleteListener
+                    val fullName = user.displayName ?: "Docteur"
+
+                    val db = AppDatabase.getDatabase(this)
+
+                    lifecycleScope.launch {
+                        val doctor = db.doctorDao().getDoctorByEmail(email)
+                        if (doctor != null) {
+                            saveSessionAndGoToDashboard(doctor.fullName, doctor.email)
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                EnterRppsDialogFragment { rpps ->
+                                    lifecycleScope.launch {
+                                        val newDoctor = Doctor(
+                                            fullName = fullName,
+                                            email = email,
+                                            rpps = rpps,
+                                            password = ""
+                                        )
+                                        db.doctorDao().insert(newDoctor)
+                                        saveSessionAndGoToDashboard(fullName, email)
+                                    }
+                                }.show(supportFragmentManager, "rppsDialog")
+                            }
+                        }
+                    }
+                } else {
+                    showToast("❌ Échec de l'authentification Firebase")
+                }
+            }
+    }
+
+    private fun saveSessionAndGoToDashboard(name: String, email: String) {
+        getSharedPreferences("session", MODE_PRIVATE).edit()
+            .putString("doctorEmail", email)
+            .putString("doctorName", name)
+            .apply()
+
+        startActivity(Intent(this, DashboardActivity::class.java))
+        finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

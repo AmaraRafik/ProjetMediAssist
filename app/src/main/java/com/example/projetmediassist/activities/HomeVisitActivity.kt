@@ -79,7 +79,7 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val visitesDomicile = appointments
                 .filter {
-                    it.description.contains("domicile", ignoreCase = true) &&
+                    it.description?.contains("domicile", ignoreCase = true) == true &&
                             it.timeInMillis >= now
                 }
                 .sortedBy { it.timeInMillis }

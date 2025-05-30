@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "830240377191",
+    "project_id": "mediassist-2ebc1",
+    "storage_bucket": "mediassist-2ebc1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830240377191:android:4003e13c738c358bf8c7c2",
+        "android_client_info": {
+          "package_name": "com.example.projetmediassist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830240377191-6sv39avc5j5cv52j5vkfqort8h533d6j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projetmediassist",
+            "certificate_hash": "6aa43b83228269cd376f89d1097f5c5e8a26bc69"
+          }
+        },
+        {
+          "client_id": "830240377191-fokrebtt64c6k5r88vh0cip2903a5dvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDg_j6G36IexU4v-_YWkVn0_V1jDmwg1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830240377191-fokrebtt64c6k5r88vh0cip2903a5dvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
