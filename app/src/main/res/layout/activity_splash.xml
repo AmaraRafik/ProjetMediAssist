@@ -20,7 +20,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="Votre assistant médical intelligent"
+        android:text="L'intelligence au service du soin"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
