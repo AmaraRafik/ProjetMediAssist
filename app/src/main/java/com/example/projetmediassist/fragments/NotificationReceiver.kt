@@ -17,7 +17,7 @@ class NotificationReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent) {
 
-        // 🧠 Vérifie si le mode "Ne pas déranger" est activé
+        // Vérifie si le mode "Ne pas déranger" est activé
         if (SettingsUtils.isDoNotDisturbEnabled(context)) {
             Log.d("NOTIF", "🔕 Notification bloquée (Ne pas déranger activé)")
             return
@@ -42,7 +42,6 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
-            // mets une icône existante
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

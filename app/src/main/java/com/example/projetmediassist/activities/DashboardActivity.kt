@@ -14,10 +14,10 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
 
     private lateinit var doctorEmail: String
-    private lateinit var doctorName: String // Declare doctorName here
+    private lateinit var doctorName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +30,10 @@ class DashboardActivity : AppCompatActivity() {
             finish()
             return
         }
-        // Retrieve doctorName from SharedPreferences
-        doctorName = prefs.getString("doctorName", "Docteur") ?: "Docteur" // Get doctor's name from prefs
+        doctorName = prefs.getString("doctorName", "Docteur") ?: "Docteur"
 
         // Afficher le nom du médecin
-        findViewById<TextView>(R.id.doctorNameText).text = "Dr. $doctorName" // Use the retrieved doctorName
+        findViewById<TextView>(R.id.doctorNameText).text = getString(R.string.dashboard_doctor_prefix, doctorName)
 
         // Charger le prochain RDV
         loadNextAppointment()
@@ -61,10 +60,10 @@ class DashboardActivity : AppCompatActivity() {
         super.onResume()
         // 🔵 Recharge le prochain RDV dès qu’on revient sur le dashboard !
         loadNextAppointment()
-        // Also update doctor name in case it was changed in settings (though your settings doesn't allow it currently)
+        // Also update doctor name in case it was changed in settings
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorName = prefs.getString("doctorName", "Docteur") ?: "Docteur"
-        findViewById<TextView>(R.id.doctorNameText).text = "Dr. $doctorName"
+        findViewById<TextView>(R.id.doctorNameText).text = getString(R.string.dashboard_doctor_prefix, doctorName)
     }
 
     private fun loadNextAppointment() {
@@ -84,7 +83,7 @@ class DashboardActivity : AppCompatActivity() {
                     rdvDateView.text = formattedDate
                     rdvPatientView.text = next.patient
                 } else {
-                    rdvDateView.text = "Aucun RDV à venir"
+                    rdvDateView.text = getString(R.string.dashboard_no_next_appointment)
                     rdvPatientView.text = ""
                 }
             }

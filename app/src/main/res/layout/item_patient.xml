@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +10,7 @@
         android:id="@+id/patientNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nom du patient"
+        android:text="@string/itempatient_sample_name"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/medical_blue" />
@@ -20,7 +19,7 @@
         android:id="@+id/patientAgeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Âge : 28 ans"
+        android:text="@string/itempatient_sample_age"
         android:textSize="15sp"
         android:layout_marginTop="2dp" />
 
@@ -28,7 +27,7 @@
         android:id="@+id/lastAppointmentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dernière visite : Aucune"
+        android:text="@string/itempatient_sample_lastvisit"
         android:textSize="15sp"
         android:layout_marginTop="2dp" />
 </LinearLayout>

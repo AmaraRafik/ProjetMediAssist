@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SmartModesActivity : AppCompatActivity() {
+class SmartModesActivity : BaseActivity() {
 
     private lateinit var currentModeText: TextView
     private lateinit var homeVisitLayout: LinearLayout
@@ -26,7 +26,7 @@ class SmartModesActivity : AppCompatActivity() {
     private lateinit var configureSlotsButton: Button
 
     private lateinit var doctorEmail: String
-    private var currentMode: String = "En consultation" // Initialize with a default
+    private var currentMode: String = ""
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class SmartModesActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = prefs.getString("doctorEmail", null) ?: run {
-            Toast.makeText(this, getString(R.string.error_not_logged_in), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.smart_modes_error_not_logged_in), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -51,41 +51,40 @@ class SmartModesActivity : AppCompatActivity() {
         endDateEditText = findViewById(R.id.absenceEndEditText)
         configureSlotsButton = findViewById(R.id.configureSlotsButton)
 
-        // Appliquer mode courant
+        // Appliquer mode courant (par défaut "En consultation")
         currentMode = SettingsUtils.getCurrentMode(this)
+        if (currentMode.isBlank()) {
+            currentMode = getString(R.string.smart_modes_current_mode_default)
+        }
         updateCurrentMode()
 
         // Gestion Visite à domicile
         homeVisitLayout.setOnClickListener {
-            // Toggle logic for "Visite à domicile"
-            if (currentMode == "Visite à domicile") {
-                currentMode = "En consultation" // Deactivate home visit
+            val homeVisit = getString(R.string.smart_modes_home_visit)
+            if (currentMode == homeVisit) {
+                currentMode = getString(R.string.smart_modes_current_mode_default)
             } else {
-                currentMode = "Visite à domicile" // Activate home visit
-                // If HomeVisitActivity needs to be launched every time it's *activated*,
-                // you can keep this line here. If it's just for initial setup, move it.
+                currentMode = homeVisit
                 startActivity(Intent(this, HomeVisitActivity::class.java))
             }
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
-            Toast.makeText(this, "Mode: $currentMode", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.smart_modes_current_mode_label, currentMode), Toast.LENGTH_SHORT).show()
         }
 
-
         // Gestion Ne pas déranger
-        // Ensure the switch state matches the current mode on load
-        doNotDisturbSwitch.isChecked = (currentMode == "Ne pas déranger")
+        doNotDisturbSwitch.isChecked = (currentMode == getString(R.string.smart_modes_do_not_disturb))
         doNotDisturbSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                currentMode = "Ne pas déranger"
+                currentMode = getString(R.string.smart_modes_do_not_disturb)
             } else {
-                currentMode = "En consultation" // Default mode when DND is off
+                currentMode = getString(R.string.smart_modes_current_mode_default)
             }
-            SettingsUtils.setDoNotDisturb(this, isChecked) // Keep this for DND specific setting
+            SettingsUtils.setDoNotDisturb(this, isChecked)
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
 
-            val msgRes = if (isChecked) R.string.mode_dnd_on else R.string.mode_dnd_off
+            val msgRes = if (isChecked) R.string.smart_modes_mode_dnd_on else R.string.smart_modes_mode_dnd_off
             Toast.makeText(this, getString(msgRes), Toast.LENGTH_SHORT).show()
         }
 
@@ -109,12 +108,11 @@ class SmartModesActivity : AppCompatActivity() {
 
         // Gestion absence
         configureSlotsButton.setOnClickListener {
-            // Only set mode to Absent if dates are valid and action is taken
             val startStr = startDateEditText.text.toString()
             val endStr = endDateEditText.text.toString()
 
             if (startStr.isBlank() || endStr.isBlank()) {
-                Toast.makeText(this, "Veuillez spécifier les dates de début et de fin.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.smart_modes_dates_required), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -122,17 +120,15 @@ class SmartModesActivity : AppCompatActivity() {
             val endMillis = dateFormat.parse(endStr)?.time ?: 0
 
             if (startMillis >= endMillis) {
-                Toast.makeText(this, "La date de fin doit être après la date de début.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.smart_modes_end_after_start), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            currentMode = "Absent" // Set mode to Absent only when action is initiated
+            currentMode = getString(R.string.smart_modes_absent)
             SettingsUtils.setCurrentMode(this, currentMode)
             updateCurrentMode()
 
-
             val db = AppDatabase.getDatabase(this)
-
             lifecycleScope.launch {
                 val toDelete = db.appointmentDao().getAppointmentsForDoctor(doctorEmail)
                     .filter { it.timeInMillis in startMillis..endMillis }
@@ -143,23 +139,23 @@ class SmartModesActivity : AppCompatActivity() {
 
                 if (emails.isNotEmpty()) {
                     val msg = absentMessageEditText.text.toString().ifBlank {
-                        "Bonjour, le docteur sera absent du $startStr au $endStr. Merci de reprogrammer votre rendez-vous."
+                        getString(R.string.smart_modes_absence_default_message, startStr, endStr)
                     }
 
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "message/rfc822"
                         putExtra(Intent.EXTRA_EMAIL, emails.toTypedArray())
-                        putExtra(Intent.EXTRA_SUBJECT, "Indisponibilité du docteur")
+                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.smart_modes_absence_subject))
                         putExtra(Intent.EXTRA_TEXT, msg)
                     }
 
                     try {
-                        startActivity(Intent.createChooser(intent, "Envoyer un message"))
+                        startActivity(Intent.createChooser(intent, getString(R.string.smart_modes_email_chooser)))
                     } catch (e: Exception) {
-                        Toast.makeText(this@SmartModesActivity, "Aucune application email trouvée", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SmartModesActivity, getString(R.string.smart_modes_no_email_app), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@SmartModesActivity, "Aucun patient avec email à contacter ou aucun rendez-vous à supprimer pour cette période.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SmartModesActivity, getString(R.string.smart_modes_no_patient_email_or_appointments), Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -167,27 +163,23 @@ class SmartModesActivity : AppCompatActivity() {
     }
 
     private fun updateCurrentMode() {
-        currentModeText.text = getString(R.string.current_mode_format, currentMode)
+        currentModeText.text = getString(R.string.smart_modes_current_mode_label, currentMode)
 
-        // Reset all backgrounds to default (white border) first
+        // Reset all backgrounds to default
         homeVisitLayout.setBackgroundResource(R.drawable.rounded_border)
         doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_border)
         absentLayout.setBackgroundResource(R.drawable.rounded_border)
 
-        // Then apply green background to the active mode
+        val homeVisit = getString(R.string.smart_modes_home_visit)
+        val dnd = getString(R.string.smart_modes_do_not_disturb)
+        val absent = getString(R.string.smart_modes_absent)
+
         when (currentMode) {
-            "Visite à domicile" -> homeVisitLayout.setBackgroundResource(R.drawable.rounded_green_background)
-            "Ne pas déranger" -> doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_green_background)
-            "Absent" -> absentLayout.setBackgroundResource(R.drawable.rounded_green_background)
+            homeVisit -> homeVisitLayout.setBackgroundResource(R.drawable.rounded_green_background)
+            dnd -> doNotDisturbLayout.setBackgroundResource(R.drawable.rounded_green_background)
+            absent -> absentLayout.setBackgroundResource(R.drawable.rounded_green_background)
         }
 
-        // Make sure the Do Not Disturb switch state reflects the current mode
-        // Only set the switch state if the current mode is explicitly "Ne pas déranger"
-        // or if it's "En consultation" AND doNotDisturb was previously enabled (which means it's now off)
-        if (currentMode == "Ne pas déranger") {
-            doNotDisturbSwitch.isChecked = true
-        } else {
-            doNotDisturbSwitch.isChecked = false
-        }
+        doNotDisturbSwitch.isChecked = (currentMode == dnd)
     }
 }

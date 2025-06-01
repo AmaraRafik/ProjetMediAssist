@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Consultation"
+            android:text="@string/consultation_title"
             android:textStyle="bold"
             android:textSize="22sp"
             android:textColor="@android:color/white" />
@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nom du patient"
+                android:text="@string/consultation_patient_placeholder"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black" />
@@ -61,11 +61,10 @@
                 android:layout_height="48dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_microphone"
-                android:contentDescription="Micro"
+                android:contentDescription="@string/consultation_micro_content_desc"
                 app:tint="@color/medical_blue"
                 android:padding="6dp"
                 android:layout_gravity="center_vertical"/>
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -73,7 +72,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Texte du patient (reconnaissance vocale)"
+        android:text="@string/consultation_patient_text_label"
         android:textSize="15sp"
         android:textColor="#666"
         android:layout_marginTop="10dp"
@@ -91,7 +90,7 @@
             android:id="@+id/speechTextEditText"
             android:layout_width="match_parent"
             android:layout_height="84dp"
-            android:hint="Ce que le patient dit..."
+            android:hint="@string/consultation_patient_text_hint"
             android:background="@android:color/transparent"
             android:textSize="16sp"
             android:padding="14dp"
@@ -106,7 +105,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Symptômes détectés"
+        android:text="@string/consultation_detected_label"
         android:textSize="15sp"
         android:textColor="@color/medical_blue"
         android:layout_marginBottom="4dp" />
@@ -123,7 +122,7 @@
             android:id="@+id/detectedSymptomsEditText"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:hint="fièvre, toux..."
+            android:hint="@string/consultation_detected_hint"
             android:background="@android:color/transparent"
             android:textSize="16sp"
             android:padding="14dp"
@@ -151,7 +150,7 @@
                 android:id="@+id/diagnosticTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Diagnostic potentiel:"
+                android:text="@string/consultation_diagnostic_title"
                 android:textStyle="bold"
                 android:textColor="@color/medical_blue"
                 android:textSize="16sp"
@@ -162,14 +161,14 @@
                 android:id="@+id/diagnosticText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Diagnostic..."
+                android:text="@string/consultation_diagnostic_text"
                 android:textColor="#333"
                 android:textSize="15sp"
                 android:background="@android:color/transparent"
                 android:inputType="textCapSentences"
                 android:padding="0dp"
                 android:singleLine="true"
-                android:hint="Diagnostic potentiel..." />
+                android:hint="@string/consultation_diagnostic_hint" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -178,7 +177,7 @@
         android:id="@+id/generatePrescriptionBtn"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Générer ordonnance"
+        android:text="@string/consultation_btn_generate_prescription"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:backgroundTint="@color/medical_blue"

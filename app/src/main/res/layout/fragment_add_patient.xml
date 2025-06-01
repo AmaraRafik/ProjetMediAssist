@@ -22,7 +22,7 @@
             android:id="@+id/addPatientTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ajouter un patient"
+            android:text="@string/addpatient_title"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@android:color/black"
@@ -32,7 +32,7 @@
             android:id="@+id/fullNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom complet"
+            android:hint="@string/addpatient_hint_fullname"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="12dp" />
@@ -41,18 +41,17 @@
             android:id="@+id/ageEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Âge"
+            android:hint="@string/addpatient_hint_age"
             android:inputType="number"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="12dp" />
 
-        <!-- Nouveaux champs ajoutés -->
         <EditText
             android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Téléphone"
+            android:hint="@string/addpatient_hint_phone"
             android:inputType="phone"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
@@ -62,18 +61,17 @@
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="E-mail"
+            android:hint="@string/addpatient_hint_email"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginBottom="12dp"
-            />
+            android:layout_marginBottom="12dp" />
 
         <EditText
             android:id="@+id/addressEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Adresse"
+            android:hint="@string/addpatient_hint_address"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="12dp" />
@@ -82,27 +80,25 @@
             android:id="@+id/historyEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Antécédents médicaux"
+            android:hint="@string/addpatient_hint_history"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="12dp" />
 
         <EditText
             android:id="@+id/allergyEditText"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Allergies"
+            android:hint="@string/addpatient_hint_allergy"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="12dp" />
-
 
         <Button
             android:id="@+id/savePatientButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enregistrer"
+            android:text="@string/addpatient_btn_save"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textColor="@android:color/white"

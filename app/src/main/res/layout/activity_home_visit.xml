@@ -18,12 +18,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Visite à domicile"
+            android:text="@string/home_visit_title"
             android:textStyle="bold"
             android:textSize="22sp"
             android:textColor="@android:color/white" />
     </LinearLayout>
-
 
     <!-- Carte Google Maps -->
     <androidx.fragment.app.FragmentContainerView
@@ -36,7 +35,7 @@
         android:id="@+id/home_visit_section_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RDV à domicile"
+        android:text="@string/home_visit_section_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:paddingLeft="18dp"

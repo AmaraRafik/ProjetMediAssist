@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@drawable/rounded_border"
@@ -12,7 +11,7 @@
         android:id="@+id/ordonnanceDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="22 mars 2024"
+        android:text="@string/ordonnancehistory_date_sample"
         android:textStyle="bold"
         android:textSize="19sp"
         android:textColor="@color/medical_blue"
@@ -23,9 +22,8 @@
         android:id="@+id/ordonnanceDiagnostic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Grippe"
+        android:text="@string/ordonnancehistory_diagnostic_sample"
         android:textSize="17sp"
         android:textColor="#222"
         android:layout_marginBottom="1dp"/>
-
 </LinearLayout>

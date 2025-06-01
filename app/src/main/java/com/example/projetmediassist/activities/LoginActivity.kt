@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -42,7 +42,6 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestScopes(Scope("https://www.googleapis.com/auth/calendar"))
-            // 🔑 DEMANDE LE SCOPE CALENDAR
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -60,14 +59,14 @@ class LoginActivity : AppCompatActivity() {
                     val doctor = db.doctorDao().getDoctorByEmail(email)
                     withContext(Dispatchers.Main) {
                         when {
-                            doctor == null -> showToast("Email non trouvé")
-                            doctor.password != password -> showToast("Mot de passe incorrect")
+                            doctor == null -> showToast(getString(R.string.login_error_email_not_found))
+                            doctor.password != password -> showToast(getString(R.string.login_error_wrong_password))
                             else -> saveSessionAndGoToDashboard(doctor.fullName, doctor.email)
                         }
                     }
                 }
             } else {
-                showToast("Veuillez remplir tous les champs")
+                showToast(getString(R.string.login_error_empty_fields))
             }
         }
 
@@ -85,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
-                showToast("Échec de connexion Google: ${e.message}")
+                showToast(getString(R.string.login_error_google, e.message ?: ""))
             }
         }
     }
@@ -123,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    showToast("❌ Échec de l'authentification Firebase")
+                    showToast(getString(R.string.login_error_firebase))
                 }
             }
     }

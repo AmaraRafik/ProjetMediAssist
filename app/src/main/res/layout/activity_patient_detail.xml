@@ -26,7 +26,7 @@
                 android:id="@+id/titleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fiche patient"
+                android:text="@string/patient_detail_title"
                 android:textStyle="bold"
                 android:textSize="22sp"
                 android:textColor="@android:color/white" />
@@ -47,7 +47,7 @@
                 android:id="@+id/fullNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rafik Bernard"
+                android:text="@string/patient_detail_name_placeholder"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"
@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Âge" />
+                    android:text="@string/patient_detail_age_label" />
                 <TextView
                     android:id="@+id/patientAgeText"
                     android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Téléphone" />
+                    android:text="@string/patient_detail_phone_label" />
                 <TextView
                     android:id="@+id/phoneText"
                     android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Email" />
+                    android:text="@string/patient_detail_email_label" />
                 <TextView
                     android:id="@+id/emailText"
                     android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Adresse" />
+                    android:text="@string/patient_detail_address_label" />
                 <TextView
                     android:id="@+id/addressText"
                     android:layout_width="wrap_content"
@@ -134,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Antécédents médicaux"
+                android:text="@string/patient_detail_history_label"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:textColor="@android:color/black"
@@ -158,7 +158,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Allergies"
+                android:text="@string/patient_detail_allergies_label"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:textColor="@android:color/black"
@@ -175,7 +175,7 @@
             android:id="@+id/appointmentButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Créer un rendez-vous"
+            android:text="@string/patient_detail_btn_create_rdv"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -190,7 +190,7 @@
             android:id="@+id/medicalHistoryButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Historique médical"
+            android:text="@string/patient_detail_btn_history"
             android:textColor="@color/medical_blue"
             android:textStyle="bold"
             android:layout_marginBottom="10dp"
@@ -200,8 +200,6 @@
             android:backgroundTint="@android:color/white"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             app:iconPadding="0dp"/>
-
-
 
     </LinearLayout>
 </ScrollView>

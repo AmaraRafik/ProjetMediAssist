@@ -11,7 +11,7 @@ import com.example.projetmediassist.R
 import com.example.projetmediassist.utils.MedicalDatabaseInitializer
 import kotlinx.coroutines.launch
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -22,7 +22,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkSessionAndStart() {
-        val sharedPref = getSharedPreferences("MediAssistPrefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("session", MODE_PRIVATE)
         val savedEmail = sharedPref.getString("doctorEmail", null)
         val firstLaunch = sharedPref.getBoolean("first_medical_data", true)
         val db = AppDatabase.getDatabase(this)

@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class ConsultationActivity : AppCompatActivity() {
+class ConsultationActivity : BaseActivity() {
 
     private var isRecording = false
 
@@ -31,7 +31,7 @@ class ConsultationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consultation)
 
-        val patientName = intent.getStringExtra("patient_name") ?: "Nom du patient"
+        val patientName = intent.getStringExtra("patient_name") ?: getString(R.string.consultation_patient_placeholder)
         findViewById<TextView>(R.id.patientNameText).text = patientName
 
         val microButton = findViewById<ImageButton>(R.id.microButton)
@@ -58,20 +58,19 @@ class ConsultationActivity : AppCompatActivity() {
             if (!isRecording) {
                 isRecording = true
                 microButton.setColorFilter(Color.parseColor("#16C672"))
-                Toast.makeText(this, "Enregistrement démarré...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.consultation_toast_recording_started), Toast.LENGTH_SHORT).show()
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fr-FR")
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Décrivez les symptômes...")
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.consultation_speech_prompt))
                 try {
                     speechLauncher.launch(intent)
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Reconnaissance vocale non supportée", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.consultation_voice_not_supported), Toast.LENGTH_SHORT).show()
                     isRecording = false
                     microButton.setColorFilter(ContextCompat.getColor(this, R.color.medical_blue))
                 }
             }
-            // PAS DE else ! (plus de "enregistrement arrêté" ici)
         }
 
         // Diagnostic MAJ uniquement quand symptômes détectés changent
@@ -89,8 +88,8 @@ class ConsultationActivity : AppCompatActivity() {
             val diagnostic = diagnosticEditText.text.toString()
             val patientNameText = findViewById<TextView>(R.id.patientNameText).text.toString()
 
-            if (diagnostic.isBlank() || diagnostic == "Aucun diagnostic détecté") {
-                Toast.makeText(this, "Veuillez générer un diagnostic avant l’ordonnance.", Toast.LENGTH_SHORT).show()
+            if (diagnostic.isBlank() || diagnostic == getString(R.string.consultation_no_diagnostic)) {
+                Toast.makeText(this, getString(R.string.consultation_toast_generate_diagnostic_first), Toast.LENGTH_SHORT).show()
             } else {
                 val intent = Intent(this, OrdonnanceActivity::class.java)
                 intent.putExtra("diagnostic", diagnostic)
@@ -157,7 +156,7 @@ class ConsultationActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 diagnosticEditText.setText(
-                    maladie?.nom ?: "Aucun diagnostic détecté"
+                    maladie?.nom ?: getString(R.string.consultation_no_diagnostic)
                 )
             }
         }

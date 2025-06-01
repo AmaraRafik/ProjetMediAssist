@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PatientMedicalHistoryActivity : AppCompatActivity() {
+class PatientMedicalHistoryActivity : BaseActivity() {
 
     private lateinit var detailOverlay: View
     private lateinit var detailCard: CardView
@@ -80,7 +80,7 @@ class PatientMedicalHistoryActivity : AppCompatActivity() {
             ordonnance.date.toString()
         }
 
-        detailDate.text = "Date : $formattedDate"
+        detailDate.text = getString(R.string.medical_history_detail_date) + " $formattedDate"
         // Les champs sont en gras côté XML
         detailPatient.text = ordonnance.patientName
         detailDoctor.text = ordonnance.doctorName

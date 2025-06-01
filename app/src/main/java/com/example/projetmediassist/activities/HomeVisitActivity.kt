@@ -26,7 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
+class HomeVisitActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HomeVisitAdapter
@@ -54,7 +54,7 @@ class HomeVisitActivity : AppCompatActivity(), OnMapReadyCallback {
         doctorEmail = prefs.getString("doctorEmail", null)
 
         if (doctorEmail == null) {
-            Toast.makeText(this, "Erreur : médecin non connecté.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.home_visit_error_not_logged_in), Toast.LENGTH_LONG).show()
             finish()
             return
         }

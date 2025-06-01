@@ -12,7 +12,7 @@ import com.example.projetmediassist.fragments.AddPatientFragment
 import kotlinx.coroutines.*
 import com.google.android.material.button.MaterialButton
 
-class DetailAppointmentActivity : AppCompatActivity() {
+class DetailAppointmentActivity : BaseActivity() {
 
     private lateinit var db: AppDatabase
     private var appointmentId: Int = -1
@@ -44,7 +44,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
         // Get appointment ID
         appointmentId = intent.getIntExtra("APPOINTMENT_ID", -1)
         if (appointmentId == -1) {
-            Toast.makeText(this, "Erreur : RDV introuvable", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.detail_appointment_error_not_found), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -60,7 +60,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
             // Récupère le RDV directement par ID
             val appointment = db.appointmentDao().getAppointmentById(appointmentId)
                 ?: return@withContext runOnUiThread {
-                    Toast.makeText(this@DetailAppointmentActivity, "Rendez-vous non trouvé", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@DetailAppointmentActivity, getString(R.string.detail_appointment_not_found), Toast.LENGTH_LONG).show()
                     finish()
                 }
 
@@ -73,12 +73,12 @@ class DetailAppointmentActivity : AppCompatActivity() {
 
                 // Visite à domicile/cabinet
                 if (appointment.description?.contains("domicile", ignoreCase = true) == true) {
-                    visitTypeText.text = "Visite à domicile"
-                    addressText.text = patient?.address ?: "(Adresse inconnue)"
+                    visitTypeText.text = getString(R.string.detail_appointment_visit_home)
+                    addressText.text = patient?.address ?: getString(R.string.detail_appointment_address_unknown)
                     addressText.visibility = View.VISIBLE
-                }else {
-                    visitTypeText.text = "Visite au cabinet"
-                    addressText.text = "Cabinet"
+                } else {
+                    visitTypeText.text = getString(R.string.detail_appointment_visit_cabinet)
+                    addressText.text = getString(R.string.detail_appointment_address_cabinet)
                     addressText.visibility = View.VISIBLE
                 }
 
@@ -95,7 +95,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
                             runOnUiThread {
                                 Toast.makeText(
                                     this@DetailAppointmentActivity,
-                                    "Patient non trouvé, veuillez l'ajouter.",
+                                    getString(R.string.detail_appointment_patient_not_found),
                                     Toast.LENGTH_SHORT
                                 ).show()
 
@@ -109,17 +109,14 @@ class DetailAppointmentActivity : AppCompatActivity() {
                     }
                 }
 
-
                 startConsultationBtn.setOnClickListener {
                     val intent = Intent(this@DetailAppointmentActivity, ConsultationActivity::class.java)
                     intent.putExtra("patient_name", patientNameText.text.toString())
                     startActivity(intent)
                 }
-
             }
         }
     }
-
 
     private fun formatDate(timestamp: Long): String {
         val sdf = java.text.SimpleDateFormat("EEEE d MMMM yyyy", java.util.Locale("fr"))

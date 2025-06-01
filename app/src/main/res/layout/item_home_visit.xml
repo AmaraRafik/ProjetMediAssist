@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +10,7 @@
         android:id="@+id/visit_patient_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nom du patient"
+        android:text="@string/homevisititem_patient_name"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/medical_blue" />
@@ -20,7 +19,7 @@
         android:id="@+id/visit_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Heure : 15:00"
+        android:text="@string/homevisititem_hour"
         android:textSize="15sp"
         android:layout_marginTop="2dp" />
 
@@ -28,7 +27,7 @@
         android:id="@+id/visit_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adresse : 12 Rue du Bien, 75012 Paris, France"
+        android:text="@string/homevisititem_address"
         android:textSize="15sp"
         android:layout_marginTop="2dp" />
 
@@ -36,7 +35,7 @@
         android:id="@+id/visit_detail_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Voir détail RDV"
+        android:text="@string/homevisititem_detail"
         android:textColor="@color/medical_blue"
         android:textStyle="bold"
         android:paddingTop="4dp"

@@ -19,7 +19,6 @@ import com.example.projetmediassist.R
 import com.example.projetmediassist.adapters.AppointmentAdapter
 import com.example.projetmediassist.database.AppDatabase
 import com.example.projetmediassist.fragments.AddAppointmentFragment
-import com.example.projetmediassist.fragments.AddPatientFragment
 import com.example.projetmediassist.fragments.OnAppointmentAddedListener
 import com.example.projetmediassist.utils.NotificationUtils
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +27,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AgendaActivity : AppCompatActivity() {
+class AgendaActivity : BaseActivity() {
 
     private var selectedDayView: TextView? = null
     private var selectedDate: Calendar? = null
@@ -50,7 +49,7 @@ class AgendaActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("session", MODE_PRIVATE)
         doctorEmail = prefs.getString("doctorEmail", null) ?: run {
-            Toast.makeText(this, "Médecin non connecté", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.agenda_error_doctor_not_connected), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -203,9 +202,9 @@ class AgendaActivity : AppCompatActivity() {
                     list,
                     { appointmentToDelete ->
                         AlertDialog.Builder(this@AgendaActivity)
-                            .setTitle("Supprimer le rendez-vous")
-                            .setMessage("Voulez-vous vraiment supprimer ce rendez-vous ?")
-                            .setPositiveButton("Oui") { _, _ ->
+                            .setTitle(getString(R.string.agenda_delete_dialog_title))
+                            .setMessage(getString(R.string.agenda_delete_dialog_message))
+                            .setPositiveButton(getString(R.string.common_yes)) { _, _ ->
                                 lifecycleScope.launch {
                                     NotificationUtils.cancelAppointmentNotifications(
                                         context = this@AgendaActivity,
@@ -216,13 +215,13 @@ class AgendaActivity : AppCompatActivity() {
                                         loadAppointments(date)
                                         Toast.makeText(
                                             this@AgendaActivity,
-                                            "RDV supprimé et notifs annulées",
+                                            getString(R.string.agenda_deleted_appointment_toast),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
                                 }
                             }
-                            .setNegativeButton("Non", null)
+                            .setNegativeButton(getString(R.string.common_no), null)
                             .show()
                     },
                     { clickedAppointment ->

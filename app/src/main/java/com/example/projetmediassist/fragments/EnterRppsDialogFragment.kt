@@ -27,16 +27,14 @@ class EnterRppsDialogFragment(val onRppsEntered: (String) -> Unit) : DialogFragm
             .setCancelable(false) // Rpps toujours requis, donc non annulable
             .create()
 
-        // Attacher le listener au bouton Valider (du layout personnalisé)
+        // Attacher le listener au bouton Valider
         validateButton.setOnClickListener {
             val rpps = inputRpps.text.toString().trim()
             if (rpps.isNotEmpty()) {
                 onRppsEntered(rpps)
                 alertDialog.dismiss() // Fermer la boîte de dialogue après validation
             } else {
-                Toast.makeText(context, "Numéro RPPS requis.", Toast.LENGTH_SHORT).show()
-                // Vous pouvez aussi ajouter une erreur sur le TextInputLayout:
-                // inputRpps.error = "RPPS requis"
+                Toast.makeText(context, getString(R.string.enterrpps_error_required), Toast.LENGTH_SHORT).show()
             }
         }
 

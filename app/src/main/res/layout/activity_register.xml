@@ -12,7 +12,7 @@
         android:layout_height="100dp" />
 
     <TextView
-        android:text="MediAssist"
+        android:text="@string/app_name"
         android:gravity="center"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -21,7 +21,7 @@
         android:layout_marginTop="20dp"/>
 
     <TextView
-        android:text="Créer un compte"
+        android:text="@string/register_title"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,49 +29,48 @@
 
     <EditText
         android:id="@+id/fullNameEditText"
-    android:hint="Nom complet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"/>
+        android:hint="@string/register_fullname_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/emailEditText"
-    android:hint="Email"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        android:hint="@string/register_email_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/rppsEditText"
-    android:hint="Numéro RPPS"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        android:hint="@string/register_rpps_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/passwordEditText"
-    android:hint="Mot de passe"
-    android:inputType="textPassword"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        android:hint="@string/register_password_hint"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/confirmPasswordEditText"
-    android:hint="Confirmer mot de passe"
-    android:inputType="textPassword"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        android:hint="@string/register_confirm_password_hint"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/registerButton"
-    android:text="S'inscrire"
-    android:layout_marginTop="16dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:backgroundTint="@color/medical_blue"/>
-
+        android:text="@string/register_button"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/medical_blue"/>
 
     <TextView
         android:id="@+id/alreadyHaveAccountText"
-        android:text="J’ai déjà un compte"
+        android:text="@string/register_already_account"
         android:textColor="@color/medical_blue"
         android:gravity="center"
         android:layout_width="match_parent"

@@ -3,13 +3,14 @@
     android:layout_height="wrap_content"
     android:padding="24dp"
     android:orientation="vertical"
+
     android:background="@drawable/rounded_border">
 
     <TextView
         android:id="@+id/dialogMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/customdialog_msg_save_patient"
+        android:text="@string/dialog_restart_message"
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:gravity="center" />

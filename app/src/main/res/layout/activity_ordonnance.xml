@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="22dp">
 
-    <!-- Partie principale (scrollable si besoin) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -29,7 +28,7 @@
                 android:id="@+id/ordonnanceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ordonnance"
+                android:text="@string/ordonnance_title"
                 android:textStyle="bold"
                 android:textSize="22sp"
                 android:textColor="@android:color/white" />
@@ -40,7 +39,7 @@
             android:id="@+id/patientNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom du patient"
+            android:text="@string/ordonnance_patient_label"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -59,7 +58,7 @@
                 android:id="@+id/diagnosticTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Diagnostic :"
+                android:text="@string/ordonnance_diagnostic_label"
                 android:textColor="@color/medical_blue"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp"/>
@@ -73,7 +72,6 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
-        <!-- Bloc Médicaments scrollable -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -90,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Médicaments proposés"
+                    android:text="@string/ordonnance_medicaments_section"
                     android:textColor="@color/medical_blue"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp"/>
@@ -102,13 +100,12 @@
                     android:nestedScrollingEnabled="false"
                     android:layout_marginBottom="8dp"/>
 
-                <!-- Bouton ajouter médicament -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addMedicamentBtn"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_height="48dp"
-                    android:text="Ajouter un médicament"
+                    android:text="@string/ordonnance_btn_add_medicament"
                     android:textColor="@color/medical_blue"
                     app:cornerRadius="24dp"
                     app:strokeColor="@color/medical_blue"
@@ -152,7 +149,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="ALERTE"
+                            android:text="@string/ordonnance_alert"
                             android:textColor="@android:color/holo_red_dark"
                             android:textStyle="bold"
                             android:textSize="15sp"/>
@@ -162,12 +159,11 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Boutons fixes en bas -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/envoyerBtn"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Envoyer au patient / pharmacie"
+        android:text="@string/ordonnance_btn_send"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/medical_blue"
@@ -181,7 +177,7 @@
         android:id="@+id/saveOrdonnanceBtn"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Enregistrer l'ordonnance"
+        android:text="@string/ordonnance_btn_save"
         android:textStyle="bold"
         android:textColor="@color/medical_blue"
         android:backgroundTint="@android:color/white"

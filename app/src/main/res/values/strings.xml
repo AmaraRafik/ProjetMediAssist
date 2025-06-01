@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjetMediAssist</string>
+    <string name="app_name">MediAssist</string>
     <string name="aucun_diagnostic">Aucun diagnostic détecté</string>
     <string name="default_web_client_id">830240377191-fokrebtt64c6k5r88vh0cip2903a5dvj.apps.googleusercontent.com</string>
 
@@ -7,5 +7,261 @@
     <string name="mode_dnd_on">🔕 Mode Ne pas déranger activé</string>
     <string name="mode_dnd_off">🔔 Notifications réactivées</string>
     <string name="current_mode_format">Mode actuel : %1$s</string>
+
+
+
+    <!-- AgendaActivity -->
+    <string name="agenda_error_doctor_not_connected">Médecin non connecté</string>
+    <string name="agenda_delete_dialog_title">Supprimer le rendez-vous</string>
+    <string name="agenda_delete_dialog_message">Voulez-vous vraiment supprimer ce rendez-vous ?</string>
+    <string name="agenda_deleted_appointment_toast">RDV supprimé et notifs annulées</string>
+    <string name="agenda_title">Agenda</string>
+    <string name="agenda_week">Semaine</string>
+    <string name="agenda_add_appointment_button">Ajouter rendez-vous</string>
+    <!-- Commun -->
+    <string name="common_yes">Oui</string>
+    <string name="common_no">Non</string>
+    <!-- ConsultationActivity -->
+    <string name="consultation_title">Consultation</string>
+    <string name="consultation_patient_placeholder">Nom du patient</string>
+    <string name="consultation_micro_content_desc">Micro</string>
+    <string name="consultation_patient_text_label">Texte du patient (reconnaissance vocale)</string>
+    <string name="consultation_patient_text_hint">Ce que le patient dit…</string>
+    <string name="consultation_detected_label">Symptômes détectés</string>
+    <string name="consultation_detected_hint">fièvre, toux…</string>
+    <string name="consultation_diagnostic_title">Diagnostic potentiel:</string>
+    <string name="consultation_diagnostic_text">Diagnostic…</string>
+    <string name="consultation_diagnostic_hint">Diagnostic potentiel…</string>
+    <string name="consultation_btn_generate_prescription">Générer ordonnance</string>
+    <string name="consultation_toast_recording_started">Enregistrement démarré…</string>
+    <string name="consultation_speech_prompt">Décrivez les symptômes…</string>
+    <string name="consultation_voice_not_supported">Reconnaissance vocale non supportée</string>
+    <string name="consultation_no_diagnostic">Aucun diagnostic détecté</string>
+    <string name="consultation_toast_generate_diagnostic_first">Veuillez générer un diagnostic avant l’ordonnance.</string>
+    <!-- DashboardActivity -->
+    <string name="dashboard_title">Accueil</string>
+    <string name="dashboard_welcome">Bienvenue</string>
+    <string name="dashboard_doctor_prefix">Dr. %1$s</string>
+    <string name="dashboard_next_appointment">Prochain RDV</string>
+    <string name="dashboard_no_next_appointment">Aucun RDV à venir</string>
+    <string name="dashboard_card_agenda">Agenda</string>
+    <string name="dashboard_card_patients">Patients</string>
+    <string name="dashboard_card_modes">Modes intelligents</string>
+    <string name="dashboard_card_settings">Paramètres</string>
+
+    <!-- DetailAppointmentActivity -->
+    <string name="detail_appointment_title">Détail RDV</string>
+    <string name="detail_appointment_error_not_found">Erreur : RDV introuvable</string>
+    <string name="detail_appointment_not_found">Rendez-vous non trouvé</string>
+    <string name="detail_appointment_visit_home">Visite à domicile</string>
+    <string name="detail_appointment_visit_cabinet">Visite au cabinet</string>
+    <string name="detail_appointment_address_unknown">(Adresse inconnue)</string>
+    <string name="detail_appointment_address_cabinet">Cabinet</string>
+    <string name="detail_appointment_btn_view_patient">Voir fiche patient</string>
+    <string name="detail_appointment_btn_start_consultation">Commencer consultation</string>
+    <string name="detail_appointment_patient_not_found">Patient non trouvé, veuillez l\'ajouter.</string>
+
+    <!-- HomeVisitActivity -->
+    <string name="home_visit_title">Visite à domicile</string>
+    <string name="home_visit_error_not_logged_in">Erreur: médecin non connecté.</string>
+    <string name="home_visit_section_title">RDV à domicile</string>
+
+    <!-- LoginActivity / Login -->
+    <string name="login_app_title">MediAssist</string>
+    <string name="login_connect_to_account">Connectez-vous à votre compte</string>
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Mot de passe</string>
+    <string name="login_btn_login">Se connecter</string>
+    <string name="login_create_account">Créer un compte</string>
+    <string name="login_or">ou</string>
+    <string name="login_btn_google">Connexion avec Google</string>
+
+    <string name="login_error_email_not_found">Email non trouvé</string>
+    <string name="login_error_wrong_password">Mot de passe incorrect</string>
+    <string name="login_error_empty_fields">Veuillez remplir tous les champs</string>
+    <string name="login_error_google">Échec de connexion Google: %1$s</string>
+    <string name="login_error_firebase">Échec de l\'authentification Firebase</string>
+
+    <!-- RegisterActivity -->
+    <string name="register_title">Créer un compte</string>
+    <string name="register_fullname_hint">Nom complet</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_rpps_hint">Numéro RPPS</string>
+    <string name="register_password_hint">Mot de passe</string>
+    <string name="register_confirm_password_hint">Confirmer mot de passe</string>
+    <string name="register_button">S\'inscrire</string>
+    <string name="register_already_account">J’ai déjà un compte</string>
+
+    <string name="register_invalid_email">Veuillez saisir un email valide</string>
+    <string name="register_invalid_rpps">Numéro RPPS invalide (11 chiffres attendus)</string>
+    <string name="register_password_invalid">Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.</string>
+    <string name="register_email_exists">Cet email est déjà utilisé</string>
+    <string name="register_success">Compte créé !</string>
+    <string name="register_fill_fields">Veuillez remplir tous les champs</string>
+
+
+    <!-- OrdonnanceActivity -->
+    <string name="ordonnance_title">Ordonnance</string>
+    <string name="ordonnance_patient_label">Nom du patient</string>
+    <string name="ordonnance_diagnostic_label">Diagnostic :</string>
+    <string name="ordonnance_medicaments_section">Médicaments proposés</string>
+    <string name="ordonnance_btn_add_medicament">Ajouter un médicament</string>
+    <string name="ordonnance_btn_send">Envoyer au patient / pharmacie</string>
+    <string name="ordonnance_btn_save">Enregistrer l\'ordonnance</string>
+    <string name="ordonnance_alert">ALERTE</string>
+    <string name="ordonnance_dialog_nom_required">Nom du médicament requis</string>
+    <string name="ordonnance_toast_med_deleted">Médicament supprimé</string>
+    <string name="ordonnance_toast_add_one_med">Veuillez ajouter au moins un médicament</string>
+    <string name="ordonnance_saved">Ordonnance enregistrée !</string>
+    <string name="ordonnance_email_missing">L\'e-mail du patient est manquant. Impossible d\'envoyer l\'ordonnance.</string>
+    <string name="ordonnance_add_at_least_one_med">Veuillez ajouter au moins un médicament à l\'ordonnance avant d\'envoyer par e-mail.</string>
+    <string name="ordonnance_email_subject">Votre Ordonnance Médicale - Dr. %1$s</string>
+    <string name="ordonnance_email_send_via">Envoyer l\'ordonnance via…</string>
+    <string name="ordonnance_no_email_app">Aucune application d\'e-mail n\'est installée ou configurée.</string>
+    <string name="ordonnance_allergy_detected">Allergie détectée :</string>
+    <string name="ordonnance_antecedent_risk">Antécédent à risque :</string>
+    <string name="ordonnance_incompatible_meds">Médicaments incompatibles :</string>
+
+    <!-- PatientDetailActivity -->
+    <string name="patient_detail_title">Fiche patient</string>
+    <string name="patient_detail_name_placeholder">Rafik Bernard</string>
+    <string name="patient_detail_age_label">Âge</string>
+    <string name="patient_detail_phone_label">Téléphone</string>
+    <string name="patient_detail_email_label">Email</string>
+    <string name="patient_detail_address_label">Adresse</string>
+    <string name="patient_detail_history_label">Antécédents médicaux</string>
+    <string name="patient_detail_allergies_label">Allergies</string>
+    <string name="patient_detail_btn_create_rdv">Créer un rendez-vous</string>
+    <string name="patient_detail_btn_history">Historique médical</string>
+    <string name="patient_detail_error_not_found">Erreur patient introuvable</string>
+    <string name="patient_detail_error_not_found2">Patient non trouvé</string>
+    <string name="patient_detail_age_format">%1$d ans</string>
+    <string name="patient_detail_history_none">Aucun</string>
+    <string name="patient_detail_allergies_none">Aucune</string>
+
+    <!-- PatientListActiviy -->
+    <string name="patient_list_title">Mes patients</string>
+    <string name="patient_list_search_hint">Rechercher un patient</string>
+    <string name="patient_list_add_content_desc">Ajouter un patient</string>
+
+    <!-- PatientMedicalHistoryActivity -->
+    <string name="medical_history_title">Historique des consultations</string>
+    <string name="medical_history_patient_label">Patient : </string>
+    <string name="medical_history_detail_date">Date :</string>
+    <string name="medical_history_detail_patient">Patient : </string>
+    <string name="medical_history_detail_doctor">Docteur : </string>
+    <string name="medical_history_detail_diagnostic">Diagnostic : </string>
+    <string name="medical_history_detail_meds">Médicaments prescrits :</string>
+
+    <!-- SmartModesActivity -->
+    <string name="smart_modes_title">Modes intelligents</string>
+    <string name="smart_modes_current_mode_label">Mode actuel : consultation</string>
+    <string name="smart_modes_current_mode_default">En consultation</string>
+    <string name="smart_modes_home_visit">Visite à domicile</string>
+    <string name="smart_modes_do_not_disturb">Ne pas déranger</string>
+    <string name="smart_modes_absent">Absent</string>
+    <string name="smart_modes_absence_start_hint">Début de l\'absence (ex: 01/06/2025)</string>
+    <string name="smart_modes_absence_end_hint">Fin de l\'absence (ex: 03/06/2025)</string>
+    <string name="smart_modes_absence_msg_hint">Message personnalisé</string>
+    <string name="smart_modes_configure_button">Configurer créneaux</string>
+    <string name="smart_modes_error_not_logged_in">Erreur : médecin non connecté.</string>
+    <string name="smart_modes_mode_dnd_on">Mode : Ne pas déranger</string>
+    <string name="smart_modes_mode_dnd_off">Mode : En consultation</string>
+    <string name="smart_modes_dates_required">Veuillez spécifier les dates de début et de fin.</string>
+    <string name="smart_modes_end_after_start">La date de fin doit être après la date de début.</string>
+    <string name="smart_modes_no_email_app">Aucune application email trouvée</string>
+    <string name="smart_modes_no_patient_email_or_appointments">Aucun patient avec email à contacter ou aucun rendez-vous à supprimer pour cette période.</string>
+    <string name="smart_modes_absence_default_message">Bonjour, le docteur sera absent du %1$s au %2$s. Merci de reprogrammer votre rendez-vous.</string>
+    <string name="smart_modes_absence_subject">Indisponibilité du docteur</string>
+    <string name="smart_modes_email_chooser">Envoyer un message</string>
+
+    <!-- Splash -->
+    <string name="splash_app_name">MediAssist</string>
+    <string name="splash_subtitle">L\'intelligence au service du soin</string>
+
+
+    <!-- AppointmentAdapter -->
+    <string name="appointmentitem_hour_example">09:00</string>
+    <string name="appointmentitem_patient_example">Yassir Chbouk</string>
+    <string name="appointmentitem_description_example">Consultation</string>
+
+
+    <!-- HomeVisitAdapter -->
+    <string name="homevisititem_patient_name">Nom du patient</string>
+    <string name="homevisititem_hour">Heure : 15:00</string>
+    <string name="homevisititem_address">Adresse : 12 Rue du Bien, 75012 Paris, France</string>
+    <string name="homevisititem_detail">Voir détail RDV</string>
+
+    <!-- MedicamentAdapter -->
+    <string name="itemmedicament_nom">Nom du médicament</string>
+    <string name="itemmedicament_posologie_hint">Posologie (ex: 3x/jour, 7 jours, avant repas)</string>
+    <string name="itemmedicament_supprimer">Supprimer</string>
+
+    <!-- OrdonnanceHistoryAdapter -->
+    <string name="ordonnancehistory_date_sample">22 mars 2024</string>
+    <string name="ordonnancehistory_diagnostic_sample">Grippe</string>
+
+    <!-- PatientAdapter -->
+    <string name="itempatient_sample_name">Nom du patient</string>
+    <string name="itempatient_sample_age">Âge : 28 ans</string>
+    <string name="itempatient_sample_lastvisit">Dernière visite : Aucune</string>
+
+    <!-- addappointmentFragment -->
+    <string name="addappointment_title">Ajouter un rendez-vous</string>
+    <string name="addappointment_patient_hint">Nom du patient</string>
+    <string name="addappointment_email_hint">Email du patient</string>
+    <string name="addappointment_time_hint">Heure du rendez-vous</string>
+    <string name="addappointment_type_title">Type de rendez-vous</string>
+    <string name="addappointment_cabinet">Cabinet</string>
+    <string name="addappointment_domicile">Domicile</string>
+    <string name="addappointment_save">Enregistrer</string>
+
+    <!-- AddpatientFragment -->
+    <string name="addpatient_title">Ajouter un patient</string>
+    <string name="addpatient_hint_fullname">Nom complet</string>
+    <string name="addpatient_hint_age">Âge</string>
+    <string name="addpatient_hint_phone">Téléphone</string>
+    <string name="addpatient_hint_email">E-mail</string>
+    <string name="addpatient_hint_address">Adresse</string>
+    <string name="addpatient_hint_history">Antécédents médicaux</string>
+    <string name="addpatient_hint_allergy">Allergies</string>
+    <string name="addpatient_btn_save">Enregistrer</string>
+
+    <!-- EnterGmailDialogFragment -->
+    <string name="entergmail_dialog_title">Synchronisation Google Calendar</string>
+    <string name="entergmail_dialog_message">Vous n\'êtes pas connecté avec Google. Fournissez une adresse Gmail.</string>
+    <string name="entergmail_dialog_hint">Entrez votre adresse Gmail</string>
+    <string name="entergmail_dialog_ok">Valider</string>
+    <string name="entergmail_dialog_cancel">Annuler</string>
+
+    <!-- custom_dialog_layout -->
+    <string name="customdialog_msg_save_patient">Souhaitez-vous enregistrer ce patient ?</string>
+    <string name="customdialog_btn_yes">Oui</string>
+    <string name="customdialog_btn_no">Non</string>
+
+    <!-- Pour EnterRppsDialogFragment -->
+    <string name="enterrpps_title">Entrez votre numéro RPPS</string>
+    <string name="enterrpps_hint">Numéro RPPS</string>
+    <string name="enterrpps_btn_validate">Valider</string>
+    <string name="enterrpps_error_required">Numéro RPPS requis.</string>
+
+    <!-- Dialog d'ajout médicament -->
+    <string name="dialogaddmed_title">Ajouter un médicament</string>
+    <string name="dialogaddmed_hint_name">Nom du médicament</string>
+    <string name="dialogaddmed_hint_poso">Posologie (ex: 2x/jour, 7 jours, avant repas)</string>
+    <string name="dialogaddmed_btn">Ajouter</string>
+
+    <!-- SettingsActivity / activity_settings.xml -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_doctor_prefix">Dr. %1$s</string>
+    <string name="settings_lang_label">Langue</string>
+    <string name="settings_lang_current">Français </string>
+    <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_sync_btn">Synchroniser avec Google Calendar</string>
+    <string name="settings_logout">Déconnexion</string>
+    <string name="settings_logout_toast">Déconnecté</string>
+    <string name="settings_change_lang_soon">Changement de langue à venir</string>
+
+    <string name="dialog_restart_message">Le changement de langue nécessite de relancer l\'application pour que tout soit pris en compte. Continuer ?</string>
 
 </resources>

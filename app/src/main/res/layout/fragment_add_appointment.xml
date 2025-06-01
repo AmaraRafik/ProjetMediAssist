@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ajouter un rendez-vous"
+            android:text="@string/addappointment_title"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@android:color/black"
@@ -32,7 +32,7 @@
             android:id="@+id/patientEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom du patient"
+            android:hint="@string/addappointment_patient_hint"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
             android:layout_marginBottom="16dp" />
@@ -41,7 +41,7 @@
             android:id="@+id/patientEmailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email du patient"
+            android:hint="@string/addappointment_email_hint"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:background="@drawable/edittext_background"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Heure du rendez-vous"
+            android:hint="@string/addappointment_time_hint"
             app:boxBackgroundMode="outline"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -74,7 +74,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type de rendez-vous"
+            android:text="@string/addappointment_type_title"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:textColor="@android:color/black"
@@ -92,7 +92,7 @@
                 android:id="@+id/optionCabinet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cabinet"
+                android:text="@string/addappointment_cabinet"
                 android:textColor="@android:color/black"
                 android:buttonTint="@color/custom_radio_color"
                 android:layout_marginEnd="32dp" />
@@ -101,7 +101,7 @@
                 android:id="@+id/optionDomicile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Domicile"
+                android:text="@string/addappointment_domicile"
                 android:textColor="@android:color/black"
                 android:buttonTint="@color/custom_radio_color" />
         </RadioGroup>
@@ -110,7 +110,7 @@
             android:id="@+id/saveAppointmentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enregistrer"
+            android:text="@string/addappointment_save"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textColor="@android:color/white"

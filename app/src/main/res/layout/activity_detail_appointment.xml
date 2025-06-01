@@ -20,12 +20,11 @@
             android:id="@+id/detailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Détail RDV"
+            android:text="@string/detail_appointment_title"
             android:textStyle="bold"
             android:textSize="22sp"
             android:textColor="@android:color/white" />
     </LinearLayout>
-
 
     <!-- Bloc entouré (CardView) pour infos RDV -->
     <androidx.cardview.widget.CardView
@@ -65,7 +64,7 @@
                 android:id="@+id/visitTypeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Visite à domicile"
+                android:text="@string/detail_appointment_visit_home"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp"
@@ -75,7 +74,7 @@
                 android:id="@+id/addressText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Adresse"
+                android:text="@string/detail_appointment_address_cabinet"
                 android:textSize="16sp"
                 android:textColor="#777" />
 
@@ -87,7 +86,7 @@
         android:id="@+id/viewPatientBtn"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:text="Voir fiche patient"
+        android:text="@string/detail_appointment_btn_view_patient"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
@@ -102,7 +101,7 @@
         android:id="@+id/startConsultationBtn"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:text="Commencer consultation"
+        android:text="@string/detail_appointment_btn_start_consultation"
         android:textColor="@color/medical_blue"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"

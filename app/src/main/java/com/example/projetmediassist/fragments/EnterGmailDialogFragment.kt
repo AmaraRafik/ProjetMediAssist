@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import com.example.projetmediassist.R
 
 class EnterGmailDialogFragment(
     private val onEmailEntered: (String) -> Unit
@@ -12,19 +13,20 @@ class EnterGmailDialogFragment(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val editText = EditText(requireContext())
-        editText.hint = "Entrez votre adresse Gmail"
+        editText.hint = getString(R.string.entergmail_dialog_hint)
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Synchronisation Google Calendar")
-            .setMessage("Vous n'êtes pas connecté avec Google. Fournissez une adresse Gmail.")
+            .setTitle(getString(R.string.entergmail_dialog_title))
+            .setMessage(getString(R.string.entergmail_dialog_message))
             .setView(editText)
-            .setPositiveButton("Valider") { _, _ ->
+            .setPositiveButton(getString(R.string.entergmail_dialog_ok)) { _, _ ->
                 val email = editText.text.toString().trim()
                 if (email.endsWith("@gmail.com")) {
                     onEmailEntered(email)
                 }
             }
-            .setNegativeButton("Annuler", null)
+            .setNegativeButton(getString(R.string.entergmail_dialog_cancel), null)
             .create()
     }
 }
+

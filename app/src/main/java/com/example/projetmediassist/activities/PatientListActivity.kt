@@ -15,7 +15,7 @@ import com.example.projetmediassist.fragments.OnPatientAddedListener
 import com.example.projetmediassist.models.Patient
 import kotlinx.coroutines.launch
 
-class PatientListActivity : AppCompatActivity() {
+class PatientListActivity : BaseActivity() {
     private lateinit var binding: ActivityPatientListBinding
     private lateinit var adapter: PatientAdapter
     private var doctorEmail: String? = null

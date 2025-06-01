@@ -25,12 +25,11 @@
                 android:id="@+id/patientListTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mes patients"
+                android:text="@string/patient_list_title"
                 android:textStyle="bold"
                 android:textSize="22sp"
                 android:textColor="@android:color/white" />
         </LinearLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -49,11 +48,10 @@
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Rechercher un patient"
+                android:hint="@string/patient_list_search_hint"
                 android:textColor="#000000"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patientRecyclerView"
@@ -70,7 +68,7 @@
         android:layout_height="100dp"
         android:src="@drawable/ic_add_patient"
         android:background="@android:color/transparent"
-        android:contentDescription="add_pat"
+        android:contentDescription="@string/patient_list_add_content_desc"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
         android:clickable="true"

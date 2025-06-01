@@ -24,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OrdonnanceActivity : AppCompatActivity() {
+class OrdonnanceActivity : BaseActivity() {
 
     private lateinit var adapter: MedicamentAdapter
     private lateinit var medicaments: MutableList<Medicament>
@@ -36,12 +36,12 @@ class OrdonnanceActivity : AppCompatActivity() {
     private var antecedents: List<String> = emptyList()
     private var diagnostic: String = ""
     private var patientName: String = ""
-    private var patientEmail: String = "" // NOUVEAU : pour stocker l'email du patient
+    private var patientEmail: String = ""
     private var doctorName: String = ""
     private var symptomes: String = ""
 
     // E-mail de la pharmacie défini en dur
-    private val PHARMACY_EMAIL = "pharmacie.test@example.com" // <-- REMPLACEZ PAR L'E-MAIL DE LA PHARMACIE
+    private val PHARMACY_EMAIL = "pharmacie.test@example.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class OrdonnanceActivity : AppCompatActivity() {
         val saveOrdonnanceBtn = findViewById<MaterialButton>(R.id.saveOrdonnanceBtn)
 
         // Récupérer le bouton "Envoyer au patient / pharmacie"
-        val envoyerBtn = findViewById<MaterialButton>(R.id.envoyerBtn) // Utilisez l'ID correct de votre XML
+        val envoyerBtn = findViewById<MaterialButton>(R.id.envoyerBtn)
 
         val db = AppDatabase.getDatabase(this)
         lifecycleScope.launch {
@@ -75,7 +75,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             }
 
             // Récupérer l'e-mail du patient
-            patientEmail = patient?.email ?: "" // Assurez-vous que votre modèle Patient a un champ 'email'
+            patientEmail = patient?.email ?: ""
 
             allergies = patient?.allergies
                 ?.split(",")
@@ -97,7 +97,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             }.toMutableList()
 
             adapter = MedicamentAdapter(medicaments) {
-                Toast.makeText(this@OrdonnanceActivity, "Médicament supprimé", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@OrdonnanceActivity, getString(R.string.ordonnance_toast_med_deleted), Toast.LENGTH_SHORT).show()
                 checkGlobalWarnings()
             }
             recyclerView.adapter = adapter
@@ -112,7 +112,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             saveOrdonnanceInDatabase()
         }
 
-        // Lier le bouton "Envoyer au patient / pharmacie" à la fonction d'envoi d'e-mail
+        // Liaison de bouton "Envoyer au patient / pharmacie" à la fonction d'envoi d'e-mail
         envoyerBtn.setOnClickListener {
             sendPrescriptionByEmail()
         }
@@ -132,7 +132,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             val nom = inputNom.text.toString().trim()
             val posologie = inputPosologie.text.toString().trim()
             if (nom.isBlank()) {
-                Toast.makeText(this, "Nom du médicament requis", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ordonnance_dialog_nom_required), Toast.LENGTH_SHORT).show()
             } else {
                 val nouveauMedicament = Medicament(
                     id = 0,
@@ -153,7 +153,7 @@ class OrdonnanceActivity : AppCompatActivity() {
 
     private fun saveOrdonnanceInDatabase() {
         if (medicaments.isEmpty()) {
-            Toast.makeText(this, "Veuillez ajouter au moins un médicament", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.ordonnance_toast_add_one_med), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -181,7 +181,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                Toast.makeText(this@OrdonnanceActivity, "Ordonnance enregistrée !", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@OrdonnanceActivity, getString(R.string.ordonnance_saved), Toast.LENGTH_LONG).show()
                 val intent = Intent(this@OrdonnanceActivity, DashboardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -229,11 +229,11 @@ class OrdonnanceActivity : AppCompatActivity() {
 
         val messages = mutableListOf<String>()
         if (allergyList.isNotEmpty())
-            messages.add("Allergie détectée :\n${allergyList.joinToString("\n") { "• $it" }}")
+            messages.add(getString(R.string.ordonnance_allergy_detected) + ":\n${allergyList.joinToString("\n") { "• $it" }}")
         if (antecedentList.isNotEmpty())
-            messages.add("Antécédent à risque :\n${antecedentList.joinToString("\n") { "• $it" }}")
+            messages.add(getString(R.string.ordonnance_antecedent_risk) + ":\n${antecedentList.joinToString("\n") { "• $it" }}")
         if (interactionPairs.isNotEmpty())
-            messages.add("Médicaments incompatibles :\n" + interactionPairs.joinToString("\n") { "• ${it.first} ↔ ${it.second}" })
+            messages.add(getString(R.string.ordonnance_incompatible_meds) + ":\n" + interactionPairs.joinToString("\n") { "• ${it.first} ↔ ${it.second}" })
 
         if (messages.isNotEmpty()) {
             globalAlertCard.visibility = android.view.View.VISIBLE
@@ -246,11 +246,11 @@ class OrdonnanceActivity : AppCompatActivity() {
     private fun sendPrescriptionByEmail() {
         // 1. Vérifier si l'e-mail du patient est disponible
         if (patientEmail.isBlank()) {
-            Toast.makeText(this, "L'e-mail du patient est manquant. Impossible d'envoyer l'ordonnance.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.ordonnance_email_missing), Toast.LENGTH_LONG).show()
             return
         }
         if (medicaments.isEmpty()) {
-            Toast.makeText(this, "Veuillez ajouter au moins un médicament à l'ordonnance avant d'envoyer par e-mail.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.ordonnance_add_at_least_one_med), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -276,7 +276,7 @@ class OrdonnanceActivity : AppCompatActivity() {
             ordonnanceText.append("Symptômes observés: ${symptomes}\n")
         }
 
-        val emailSubject = "Votre Ordonnance Médicale - Dr. ${doctorName}"
+        val emailSubject = getString(R.string.ordonnance_email_subject, doctorName)
         val emailBody = "Bonjour ${patientName},\n\n" +
                 "Voici votre ordonnance émise par le Dr. ${doctorName}.\n\n" +
                 ordonnanceText.toString() +
@@ -300,9 +300,9 @@ class OrdonnanceActivity : AppCompatActivity() {
 
         // 5. Lancer l'application d'e-mail
         try {
-            startActivity(Intent.createChooser(intent, "Envoyer l'ordonnance via..."))
+            startActivity(Intent.createChooser(intent, getString(R.string.ordonnance_email_send_via)))
         } catch (e: Exception) {
-            Toast.makeText(this, "Aucune application d'e-mail n'est installée ou configurée.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.ordonnance_no_email_app), Toast.LENGTH_LONG).show()
             e.printStackTrace()
         }
     }

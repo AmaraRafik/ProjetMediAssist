@@ -12,7 +12,7 @@
         android:layout_height="100dp" />
 
     <TextView
-        android:text="MediAssist"
+        android:text="@string/login_app_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -20,14 +20,14 @@
         android:layout_marginTop="20dp"/>
 
     <TextView
-        android:text="Connectez-vous à votre compte"
+        android:text="@string/login_connect_to_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"/>
 
     <EditText
         android:id="@+id/emailEditText"
-        android:hint="Email"
+        android:hint="@string/login_hint_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -35,14 +35,14 @@
 
     <EditText
         android:id="@+id/passwordEditText"
-        android:hint="Mot de passe"
+        android:hint="@string/login_hint_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/loginButton"
-        android:text="Se connecter"
+        android:text="@string/login_btn_login"
         android:backgroundTint="@color/medical_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,31 +50,28 @@
 
     <TextView
         android:id="@+id/createAccountText"
-        android:text="Créer un compte"
+        android:text="@string/login_create_account"
         android:textColor="@color/medical_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"/>
 
     <TextView
-        android:text="ou"
+        android:text="@string/login_or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"/>
 
 
     <Button
-
         android:id="@+id/googleSignInButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Connexion avec Google"
+        android:text="@string/login_btn_google"
         android:drawableLeft="@drawable/ic_google"
         android:drawablePadding="12dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@android:color/black"
         android:backgroundTint="@android:color/white" />
-
-
 </LinearLayout>

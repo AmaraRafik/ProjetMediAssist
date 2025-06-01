@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Paramètres"
+                android:text="@string/settings_title"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white" />
@@ -74,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Langue"
+                android:text="@string/settings_lang_label"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:paddingStart="12dp"/>
@@ -82,7 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Français >"
+                android:text="@string/settings_lang_current"
                 android:textSize="16sp"
                 android:textColor="#007BFF"
                 android:paddingEnd="12dp"/>
@@ -102,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Notifications"
+                android:text="@string/settings_notifications_label"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:paddingStart="12dp"/>
@@ -122,7 +121,7 @@
             android:id="@+id/syncButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Synchroniser avec Google Calendar"
+            android:text="@string/settings_sync_btn"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:backgroundTint="@color/medical_blue"
@@ -139,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Déconnexion"
+            android:text="@string/settings_logout"
             android:textColor="#FF0000"
             android:textSize="16sp"
             android:textStyle="bold"
